@@ -20,65 +20,44 @@ struct BasicCadets
     int numExcuse = 0;
 };
 
-// Function to select a company
-void selectCompany(BasicCadets *cadets, int *index)
+// Function to select company or platoon
+void selectUnit(BasicCadets *cadets, int index, string type)
 {
-    int companyChoice;
-    cout << "Company:" << endl;
-    cout << "1. Alpha" << endl;
-    cout << "2. Bravo" << endl;
-    cout << "3. Charlie" << endl;
-    cout << "4. Delta" << endl;
-    cout << "Choice: ";
-    cin >> companyChoice;
+    int choice = 0; // Store the users choice
+    int row = 0; // Store the row based on the type
 
-    switch (companyChoice)
+    // Stores the company and platoon type
+    string unit[2][4] = {
+        {"Alpha", "Bravo", "Charlie", "Delta"}, // row 0
+        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}}; // row 1
+
+    // Identify the value of row based on the type
+    if (type == "Company")
     {
-    case 1:
-        (cadets + *index)->company = "Alpha";
-        break;
-    case 2:
-        (cadets + *index)->company = "Bravo";
-        break;
-    case 3:
-        (cadets + *index)->company = "Charlie";
-        break;
-    case 4:
-        (cadets + *index)->company = "Delta";
-        break;
-    default:
-        cout << "Invalid choice!" << endl;
+        row = 0;
     }
-}
-
-// Function to select a platoon
-void selectPlatoon(BasicCadets *cadets, int *index)
-{
-    int platoonChoice;
-    cout << "Platoon:" << endl;
-    cout << "1. 1st Platoon" << endl;
-    cout << "2. 2nd Platoon" << endl;
-    cout << "3. 3rd Platoon" << endl;
-    cout << "4. 4th Platoon" << endl;
-    cout << "Choice: ";
-    cin >> platoonChoice;
-
-    switch (platoonChoice)
+    else if (type == "Platoon")
     {
-    case 1:
-        (cadets + *index)->platoon = "1st Platoon";
-        break;
-    case 2:
-        (cadets + *index)->platoon = "2nd Platoon";
-        break;
-    case 3:
-        (cadets + *index)->platoon = "3rd Platoon";
-        break;
-    case 4:
-        (cadets + *index)->platoon = "4th Platoon";
-        break;
-    default:
-        cout << "Invalid choice!" << endl;
+        row = 1;
+    }
+
+    // Display the menu 
+    cout << type << ":" << endl;
+    for (int i = 0; i < 4; i++)
+    {
+        cout << i + 1 << ". " << unit[row][i] << endl;
+    }
+    cout << "Enter Choice: ";
+    cin >> choice;
+
+    // Assign the value to the comapany or platoon variable
+    if (type == "Company")
+    {
+        (cadets + index)->company = unit[row][choice - 1];
+    }
+    else if (type == "Platoon")
+    {
+        (cadets + index)->platoon = unit[row][choice - 1];
     }
 }
 
@@ -92,9 +71,13 @@ void registerUser(BasicCadets *cadets, int *index, int *numberOfCadets)
     getline(cin, (cadets + *index)->studentID);
     cout << "Program\n(ex. BSCE-1-1): ";
     getline(cin, (cadets + *index)->program);
-  
-    selectCompany(cadets, index);
-    selectPlatoon(cadets, index);
+
+    // Function for selecting the unit
+    selectUnit(cadets, *index, "Company"); // For Company
+    selectUnit(cadets, *index, "Platoon"); // For Platoon
+
+    cout << (cadets + *index)->company << endl;
+    cout << (cadets + *index)->platoon << endl;
 
     (*index)++;
     (*numberOfCadets)++;
