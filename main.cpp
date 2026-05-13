@@ -20,15 +20,36 @@ struct BasicCadets
     int numExcuse = 0;
 };
 
+// Function that display the user main menu
+void displayUserMenu()
+{
+    cout << "Welcome to UnitSync!\n\n";
+    cout << "Menu:\n";
+    cout << "1. Register\n";
+    cout << "2. Log In\n";
+    cout << "3. Exit\n";
+    cout << "Enter Choice: ";
+}
+
+// Function that returns the user choice in the main menu
+int userMenu()
+{
+    int choice = 0;
+    displayUserMenu(); // display the menu
+    cin >> choice;
+
+    return choice; // return the choice
+}
+
 // Function to select company or platoon
 void selectUnit(BasicCadets *cadets, int index, string type)
 {
     int choice = 0; // Store the users choice
-    int row = 0; // Store the row based on the type
+    int row = 0;    // Store the row based on the type
 
     // Stores the company and platoon type
     string unit[2][4] = {
-        {"Alpha", "Bravo", "Charlie", "Delta"}, // row 0
+        {"Alpha", "Bravo", "Charlie", "Delta"},                        // row 0
         {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}}; // row 1
 
     // Identify the value of row based on the type
@@ -41,7 +62,7 @@ void selectUnit(BasicCadets *cadets, int index, string type)
         row = 1;
     }
 
-    // Display the menu 
+    // Display the menu
     cout << type << ":" << endl;
     for (int i = 0; i < 4; i++)
     {
@@ -85,11 +106,25 @@ void registerUser(BasicCadets *cadets, int *index, int *numberOfCadets)
 
 int main()
 {
+    int choice = 0;                                    // Store the user's choice
     int numberOfCadets = 0;                            // total number of cadets registered
     int lastCadetIndex = 0;                            // track the last index of user
     BasicCadets *cadets = new BasicCadets[MAX_CADETS]; // dynamic array to store cadets
 
-    registerUser(cadets, &lastCadetIndex, &numberOfCadets);
+    choice = userMenu(); // Main Menu
+
+    switch (choice)
+    {
+    case 1: // Register
+        registerUser(cadets, &lastCadetIndex, &numberOfCadets);
+        break;
+    case 2: // Log In
+        cout << "\nComing Soon..\n";
+        break;
+    case 3: // Exit
+        cout << "\nThank you for using UnitSync!\n";
+        break;
+    }
 
     delete[] cadets;
     return 0;
