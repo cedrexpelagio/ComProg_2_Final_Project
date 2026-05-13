@@ -6,43 +6,47 @@ using namespace std;
 
 const int MAX_CADETS = 1000;
 
-// Basic Cadets struct
-struct BasicCadets
+// Struct for User's data
+struct User
 {
     string userName = "";
     string studentID = "";
     string program = "";
     string company = "";
     string platoon = "";
-    string status = "";
+    string status = ""; 
+    string rank = "";// For advance cadets, staff officers and brigade staff
+    string designation = "";// For staff officers and brigade staff
     int numPresent = 0;
     int numAbsent = 0;
     int numExcuse = 0;
 };
 
-// Function that display the user main menu
-void displayUserMenu()
+// Function that display the user menu
+void displayUserMenu(string typeMenu)
 {
+    if (typeMenu == "Main"){
     cout << "Welcome to UnitSync!\n\n";
     cout << "Menu:\n";
     cout << "1. Register\n";
     cout << "2. Log In\n";
     cout << "3. Exit\n";
     cout << "Enter Choice: ";
+    } 
 }
 
 // Function that returns the user choice in the main menu
-int userMenu()
+int userMenu(string typeMenu)
 {
     int choice = 0;
-    displayUserMenu(); // display the menu
+    displayUserMenu(typeMenu); // display the menu
     cin >> choice;
 
     return choice; // return the choice
 }
 
 // Function to select company or platoon
-void selectUnit(BasicCadets *cadets, int index, string type)
+void selectUnit(User *basicCadets, int index, string type)
 {
     int choice = 0; // Store the users choice
     int row = 0;    // Store the row based on the type
@@ -74,31 +78,34 @@ void selectUnit(BasicCadets *cadets, int index, string type)
     // Assign the value to the comapany or platoon variable
     if (type == "Company")
     {
-        (cadets + index)->company = unit[row][choice - 1];
+        (basicCadets + index)->company = unit[row][choice - 1];
     }
     else if (type == "Platoon")
     {
-        (cadets + index)->platoon = unit[row][choice - 1];
+        (basicCadets + index)->platoon = unit[row][choice - 1];
     }
 }
 
 // Function to register a user
-void registerUser(BasicCadets *cadets, int *index, int *numberOfCadets)
+void registerUser(User *basicCadets, int *index, int *numberOfCadets)
 {
+    cin.ignore();
     cout << "User Number " << *index + 1 << ":" << endl;
     cout << "Full Name\n(ex. CRUZ JOSE A): ";
-    getline(cin, (cadets + *index)->userName);
+    getline(cin, (basicCadets + *index)->userName);
     cout << "Student ID\n(ex. LQ-00093-2025): ";
-    getline(cin, (cadets + *index)->studentID);
+    getline(cin, (basicCadets + *index)->studentID);
     cout << "Program\n(ex. BSCE-1-1): ";
-    getline(cin, (cadets + *index)->program);
+    getline(cin, (basicCadets + *index)->program);
 
     // Function for selecting the unit
-    selectUnit(cadets, *index, "Company"); // For Company
-    selectUnit(cadets, *index, "Platoon"); // For Platoon
+    selectUnit(basicCadets, *index, "Company"); // For Company
+    selectUnit(basicCadets, *index, "Platoon"); // For Platoon
 
-    cout << (cadets + *index)->company << endl;
-    cout << (cadets + *index)->platoon << endl;
+    cout << (basicCadets + *index)->company << endl;
+    cout << (basicCadets + *index)->platoon << endl;
+
+    cout << "\nRegistration Complete!\n";
 
     (*index)++;
     (*numberOfCadets)++;
@@ -109,14 +116,14 @@ int main()
     int choice = 0;                                    // Store the user's choice
     int numberOfCadets = 0;                            // total number of cadets registered
     int lastCadetIndex = 0;                            // track the last index of user
-    BasicCadets *cadets = new BasicCadets[MAX_CADETS]; // dynamic array to store cadets
+    User *basicCadets = new User[MAX_CADETS]; // dynamic array to store cadets
 
-    choice = userMenu(); // Main Menu
+    choice = userMenu("Main"); // Main Menu
 
     switch (choice)
     {
-    case 1: // Register
-        registerUser(cadets, &lastCadetIndex, &numberOfCadets);
+    case 1: // Register 
+        registerUser(basicCadets, &lastCadetIndex, &numberOfCadets);
         break;
     case 2: // Log In
         cout << "\nComing Soon..\n";
@@ -126,6 +133,6 @@ int main()
         break;
     }
 
-    delete[] cadets;
+    delete[] basicCadets;
     return 0;
 }
