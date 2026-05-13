@@ -14,9 +14,10 @@ struct User
     string program = "";
     string company = "";
     string platoon = "";
-    string status = ""; 
-    string rank = "";// For advance cadets, staff officers and brigade staff
-    string designation = "";// For staff officers and brigade staff
+    string status = "";
+    string role = "";
+    string rank = "";        // For advance cadets, staff officers and brigade staff
+    string designation = ""; // For staff officers and brigade staff
     int numPresent = 0;
     int numAbsent = 0;
     int numExcuse = 0;
@@ -25,14 +26,22 @@ struct User
 // Function that display the user menu
 void displayUserMenu(string typeMenu)
 {
-    if (typeMenu == "Main"){
-    cout << "Welcome to UnitSync!\n\n";
-    cout << "Menu:\n";
-    cout << "1. Register\n";
-    cout << "2. Log In\n";
-    cout << "3. Exit\n";
-    cout << "Enter Choice: ";
-    } 
+    if (typeMenu == "Main")
+    {
+        cout << "Welcome to UnitSync!\n\n";
+        cout << "Menu:\n";
+        cout << "1. Register\n";
+        cout << "2. Log In\n";
+        cout << "3. Exit\n";
+    }
+    else if (typeMenu == "Role")
+    {
+        cout << "Select Role:\n";
+        cout << "1. Basic Cadet\n";
+        cout << "2. Advance Cadet\n";
+        cout << "3. Staff Officer\n";
+        cout << "4. Brigade Staff\n";
+    }
 }
 
 // Function that returns the user choice in the main menu
@@ -40,6 +49,7 @@ int userMenu(string typeMenu)
 {
     int choice = 0;
     displayUserMenu(typeMenu); // display the menu
+    cout << "Enter Choice: ";
     cin >> choice;
 
     return choice; // return the choice
@@ -113,16 +123,17 @@ void registerUser(User *basicCadets, int *index, int *numberOfCadets)
 
 int main()
 {
-    int choice = 0;                                    // Store the user's choice
-    int numberOfCadets = 0;                            // total number of cadets registered
-    int lastCadetIndex = 0;                            // track the last index of user
+    int choice = 0;                           // Store the user's choice
+    int numberOfCadets = 0;                   // total number of cadets registered
+    int lastCadetIndex = 0;                   // track the last index of user
     User *basicCadets = new User[MAX_CADETS]; // dynamic array to store cadets
 
     choice = userMenu("Main"); // Main Menu
 
     switch (choice)
     {
-    case 1: // Register 
+    case 1: // Register
+        choice = userMenu("Role");
         registerUser(basicCadets, &lastCadetIndex, &numberOfCadets);
         break;
     case 2: // Log In
