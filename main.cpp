@@ -96,18 +96,24 @@ void selectUnit(User *basicCadets, int index, string type)
     }
 }
 
+// Function to register user student information
+// This is a required for every type of user
+void registerUser(User *user, int index)
+{
+    cin.ignore();
+    cout << "Student Information:\n";
+    cout << "Full Name\n(ex. CRUZ JOSE A): ";
+    getline(cin, (user + index)->userName);
+    cout << "Student ID\n(ex. LQ-00093-2025): ";
+    getline(cin, (user + index)->studentID);
+    cout << "Program\n(ex. BSCE-1-1): ";
+    getline(cin, (user + index)->program);
+}
+
 // Function to register a user
 void registerUser(User *basicCadets, int *index, int *numberOfCadets)
 {
-    cin.ignore();
-    cout << "User Number " << *index + 1 << ":" << endl;
-    cout << "Full Name\n(ex. CRUZ JOSE A): ";
-    getline(cin, (basicCadets + *index)->userName);
-    cout << "Student ID\n(ex. LQ-00093-2025): ";
-    getline(cin, (basicCadets + *index)->studentID);
-    cout << "Program\n(ex. BSCE-1-1): ";
-    getline(cin, (basicCadets + *index)->program);
-
+    registerUser(basicCadets, *index);// register student information
     // Function for selecting the unit
     selectUnit(basicCadets, *index, "Company"); // For Company
     selectUnit(basicCadets, *index, "Platoon"); // For Platoon
@@ -123,17 +129,18 @@ void registerUser(User *basicCadets, int *index, int *numberOfCadets)
 
 int main()
 {
-    int choice = 0;                           // Store the user's choice
+    int option = 0;                           // Store the user's option
+    int role = 0;                             // Store the user's role
     int numberOfCadets = 0;                   // total number of cadets registered
     int lastCadetIndex = 0;                   // track the last index of user
     User *basicCadets = new User[MAX_CADETS]; // dynamic array to store cadets
 
-    choice = userMenu("Main"); // Main Menu
+    option = userMenu("Main"); // Main Menu
 
-    switch (choice)
+    switch (option)
     {
     case 1: // Register
-        choice = userMenu("Role");
+        role = userMenu("Role");
         registerUser(basicCadets, &lastCadetIndex, &numberOfCadets);
         break;
     case 2: // Log In
