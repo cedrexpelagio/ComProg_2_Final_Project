@@ -16,8 +16,9 @@ struct User
     string platoon = "";
     string status = "";
     string role = "";
-    string rank = "";        // For advance cadets, staff officers and brigade staff
+    string rank = "";  // For advance cadets, staff officers and brigade staff
     string staff = ""; // For staff officers and brigade staff
+    string password = "";// User Password
     int numPresent = 0;
     int numAbsent = 0;
     int numExcuse = 0;
@@ -114,6 +115,7 @@ void registerUser(User *user, int index)
 void registerRank(User *user, int index)
 {
     cout << "Rank(ex. C/1LT): ";
+    cin.ignore();
     getline(cin, (user + index)->rank);
 }
 
@@ -122,6 +124,11 @@ void registerStaff(User *user, int index)
 {
     cout << "Staff(ex. S3)  : ";
     getline(cin, (user + index)->staff);
+}
+
+// Function that auto generate the user's password
+string generatePassword(User *user, int index){
+
 }
 
 // Function to register a user
@@ -144,14 +151,8 @@ void registerUser(User *user, int *index, int *numberOfUser)
     {
         registerRank(user, *index);
     }
-    // Registration of Staff Officers
-    else if (role == "Staff Officer")
-    {
-        registerRank(user, *index);
-        registerStaff(user, *index);
-    }
-    // Registration of Brigade Officers
-    else if (role == "Brigade Officer")
+    // Registration of Staff Officers and Brigade Staff
+    else if (role == "Staff Officer" || role == "Brigade Officer")
     {
         registerRank(user, *index);
         registerStaff(user, *index);
