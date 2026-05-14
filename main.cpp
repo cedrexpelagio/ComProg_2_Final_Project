@@ -4,7 +4,7 @@
 using namespace std;
 // UnitSync
 
-const int MAX_CADETS = 1000;
+const int MAX_USER = 100;
 
 // Struct for User's data
 struct User
@@ -118,29 +118,25 @@ void registerUser(User *user, int *index, int *numberOfUser)
 
     registerUser(user, *index); // register student information
 
-    // Registration of Basic Cadet
+    // Registration of Basic Cadets
     if (role == "Basic Cadet")
     {
         cout << "Role: " << role << endl;
         // Function for selecting the unit
         selectUnit(user, *index, "Company"); // For Company
         selectUnit(user, *index, "Platoon"); // For Platoon
-
-        cout << (user + *index)->company << endl;
-        cout << (user + *index)->platoon << endl;
-        cout << (user + *index)->role << endl;
     }
-    // Registration of Advance Cadet
+    // Registration of Advance Cadets
     else if (role == "Advance Cadet")
     {
         cout << "Role: " << role << endl;
     }
-    // Registration of Staff Officer
+    // Registration of Staff Officers
     else if (role == "Staff Officer")
     {
         cout << "Role: " << role << endl;
     }
-    // Registration of Brigade Officer
+    // Registration of Brigade Officers
     else if (role == "Brigade Officer")
     {
         cout << "Role: " << role << endl;
@@ -174,20 +170,54 @@ void roleConverter(User *user, int role, int index)
 
 int main()
 {
-    int option = 0;                           // Store the user's option
-    int role = 0;                             // Store the user's role
-    int numberOfCadets = 0;                   // total number of cadets registered
-    int lastCadetIndex = 0;                   // track the last index of user
-    User *basicCadets = new User[MAX_CADETS]; // dynamic array to store cadets
+    int option = 0; // Store the user's option
+    int role = 0;   // Store the user's role
+
+    // Basic Cadets Main Variables
+    int numCadets = 0;                      // total number of basic cadets registered
+    int lastCadet = 0;                      // track the last index of basic cadet
+    User *basicCadets = new User[MAX_USER]; // dynamic array to store cadets
+
+    int numAdvanceCadets = 0;
+    int lastAdvanceCadet = 0;
+    User *advanceCadets = new User[MAX_USER];
+
+    int numOfficers = 0;
+    int lastOfficer = 0;
+    User *staffOfficers = new User[MAX_USER];
+
+    int numBrigades = 0;
+    int lastBrigade = 0;
+    User *brigadeStaffs = new User[MAX_USER];
 
     option = userMenu("Main"); // Main Menu
 
     switch (option)
     {
-    case 1: // Register
-        role = userMenu("Role");
-        roleConverter(basicCadets, role, lastCadetIndex);
-        registerUser(basicCadets, &lastCadetIndex, &numberOfCadets);
+    case 1: // Registration Section
+        // Role Based Registration
+        role = userMenu("Role"); // Role Menu
+
+        switch (role)
+        {
+        case 1: // Basic Cadets
+            roleConverter(basicCadets, role, lastCadet);
+            registerUser(basicCadets, &lastCadet, &numCadets);
+            break;
+        case 2: // Advance Cadets
+            roleConverter(advanceCadets, role, lastAdvanceCadet);
+            registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets);
+            break;
+        case 3: // Staff Officers
+            roleConverter(staffOfficers, role, lastOfficer);
+            registerUser(staffOfficers, &lastOfficer, &numOfficers);
+            break;
+        case 4: // Brigade Staff
+            roleConverter(brigadeStaffs, role, lastBrigade);
+            registerUser(brigadeStaffs, &lastBrigade, &numBrigades);
+            break;
+        }
+
         break;
     case 2: // Log In
         cout << "\nComing Soon..\n";
@@ -197,6 +227,10 @@ int main()
         break;
     }
 
+    // Free Memory
     delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;
+    delete[] brigadeStaffs;
     return 0;
 }
