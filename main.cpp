@@ -101,7 +101,7 @@ void selectUnit(User *basicCadets, int index, string type)
 void registerUser(User *user, int index)
 {
     cin.ignore();
-    cout << "Student Information:\n";
+    cout << "Student Information:\n\n";
     cout << "Full Name\n(ex. CRUZ JOSE A): ";
     getline(cin, (user + index)->userName);
     cout << "Student ID\n(ex. LQ-00093-2025): ";
@@ -113,18 +113,40 @@ void registerUser(User *user, int index)
 // Function to register a user
 void registerUser(User *basicCadets, int *index, int *numberOfCadets)
 {
-    registerUser(basicCadets, *index);// register student information
+    registerUser(basicCadets, *index); // register student information
     // Function for selecting the unit
     selectUnit(basicCadets, *index, "Company"); // For Company
     selectUnit(basicCadets, *index, "Platoon"); // For Platoon
 
     cout << (basicCadets + *index)->company << endl;
     cout << (basicCadets + *index)->platoon << endl;
+    cout << (basicCadets + *index)->role << endl;
 
     cout << "\nRegistration Complete!\n";
 
     (*index)++;
     (*numberOfCadets)++;
+}
+
+// Function that converter user role based on role option
+void roleConverter(User *user, int role, int index)
+{
+    switch (role)
+    {
+    case 1:
+        (user + index)->role = "Basic Cadet";
+        break;
+    case 2:
+        (user + index)->role = "Advance Cadet";
+        break;
+    case 3:
+        (user + index)->role = "Staff Officer";
+        break;
+    case 4:
+        (user + index)->role = "Brigade Officer";
+        break;
+    
+    }
 }
 
 int main()
@@ -141,6 +163,7 @@ int main()
     {
     case 1: // Register
         role = userMenu("Role");
+        roleConverter(basicCadets, role, lastCadetIndex);
         registerUser(basicCadets, &lastCadetIndex, &numberOfCadets);
         break;
     case 2: // Log In
