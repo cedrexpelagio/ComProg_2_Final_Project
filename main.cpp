@@ -111,21 +111,45 @@ void registerUser(User *user, int index)
 }
 
 // Function to register a user
-void registerUser(User *basicCadets, int *index, int *numberOfCadets)
+void registerUser(User *user, int *index, int *numberOfUser)
 {
-    registerUser(basicCadets, *index); // register student information
-    // Function for selecting the unit
-    selectUnit(basicCadets, *index, "Company"); // For Company
-    selectUnit(basicCadets, *index, "Platoon"); // For Platoon
 
-    cout << (basicCadets + *index)->company << endl;
-    cout << (basicCadets + *index)->platoon << endl;
-    cout << (basicCadets + *index)->role << endl;
+    string role = (user + *index)->role;
+
+    registerUser(user, *index); // register student information
+
+    // Registration of Basic Cadet
+    if (role == "Basic Cadet")
+    {
+        cout << "Role: " << role << endl;
+        // Function for selecting the unit
+        selectUnit(user, *index, "Company"); // For Company
+        selectUnit(user, *index, "Platoon"); // For Platoon
+
+        cout << (user + *index)->company << endl;
+        cout << (user + *index)->platoon << endl;
+        cout << (user + *index)->role << endl;
+    }
+    // Registration of Advance Cadet
+    else if (role == "Advance Cadet")
+    {
+        cout << "Role: " << role << endl;
+    }
+    // Registration of Staff Officer
+    else if (role == "Staff Officer")
+    {
+        cout << "Role: " << role << endl;
+    }
+    // Registration of Brigade Officer
+    else if (role == "Brigade Officer")
+    {
+        cout << "Role: " << role << endl;
+    }
 
     cout << "\nRegistration Complete!\n";
 
     (*index)++;
-    (*numberOfCadets)++;
+    (*numberOfUser)++;
 }
 
 // Function that converter user role based on role option
@@ -145,7 +169,6 @@ void roleConverter(User *user, int role, int index)
     case 4:
         (user + index)->role = "Brigade Officer";
         break;
-    
     }
 }
 
