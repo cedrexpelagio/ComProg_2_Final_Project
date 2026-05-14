@@ -17,7 +17,7 @@ struct User
     string status = "";
     string role = "";
     string rank = "";        // For advance cadets, staff officers and brigade staff
-    string designation = ""; // For staff officers and brigade staff
+    string staff = ""; // For staff officers and brigade staff
     int numPresent = 0;
     int numAbsent = 0;
     int numExcuse = 0;
@@ -102,18 +102,32 @@ void registerUser(User *user, int index)
 {
     cin.ignore();
     cout << "Student Information:\n\n";
-    cout << "Full Name\n(ex. CRUZ JOSE A): ";
+    cout << "Full Name(ex. CRUZ JOSE A)   : ";
     getline(cin, (user + index)->userName);
-    cout << "Student ID\n(ex. LQ-00093-2025): ";
+    cout << "Student ID(ex. LQ-00093-2025): ";
     getline(cin, (user + index)->studentID);
-    cout << "Program\n(ex. BSCE-1-1): ";
+    cout << "Program(ex. BSCE-1-1)        : ";
     getline(cin, (user + index)->program);
+}
+
+// Function to register advance cadets, staff officer and brigade staff ranks
+void registerRank(User *user, int index)
+{
+    cout << "Rank(ex. C/1LT): ";
+    getline(cin, (user + index)->rank);
+}
+
+// Function to register the staff of advance cadets, staff officer and brigade staff
+void registerStaff(User *user, int index)
+{
+    cout << "Staff(ex. S3)  : ";
+    getline(cin, (user + index)->staff);
 }
 
 // Function to register a user
 void registerUser(User *user, int *index, int *numberOfUser)
 {
-
+    // Store the role
     string role = (user + *index)->role;
 
     registerUser(user, *index); // register student information
@@ -121,7 +135,6 @@ void registerUser(User *user, int *index, int *numberOfUser)
     // Registration of Basic Cadets
     if (role == "Basic Cadet")
     {
-        cout << "Role: " << role << endl;
         // Function for selecting the unit
         selectUnit(user, *index, "Company"); // For Company
         selectUnit(user, *index, "Platoon"); // For Platoon
@@ -129,17 +142,19 @@ void registerUser(User *user, int *index, int *numberOfUser)
     // Registration of Advance Cadets
     else if (role == "Advance Cadet")
     {
-        cout << "Role: " << role << endl;
+        registerRank(user, *index);
     }
     // Registration of Staff Officers
     else if (role == "Staff Officer")
     {
-        cout << "Role: " << role << endl;
+        registerRank(user, *index);
+        registerStaff(user, *index);
     }
     // Registration of Brigade Officers
     else if (role == "Brigade Officer")
     {
-        cout << "Role: " << role << endl;
+        registerRank(user, *index);
+        registerStaff(user, *index);
     }
 
     cout << "\nRegistration Complete!\n";
@@ -175,26 +190,30 @@ int main()
 
     // Basic Cadets Main Variables
     int numCadets = 0;                      // total number of basic cadets registered
-    int lastCadet = 0;                      // track the last index of basic cadet
-    User *basicCadets = new User[MAX_USER]; // dynamic array to store cadets
+    int lastCadet = 0;                      // track the last index of basic cadets
+    User *basicCadets = new User[MAX_USER]; // dynamic array to store basic cadets
 
-    int numAdvanceCadets = 0;
-    int lastAdvanceCadet = 0;
-    User *advanceCadets = new User[MAX_USER];
+    // Advance Cadets Main Variables
+    int numAdvanceCadets = 0;                 // total number of advance cadets registered
+    int lastAdvanceCadet = 0;                 // track the last index of advance cadets
+    User *advanceCadets = new User[MAX_USER]; // dynamic array to store advance cadets
 
-    int numOfficers = 0;
-    int lastOfficer = 0;
-    User *staffOfficers = new User[MAX_USER];
+    // Staff Officers Main Variables
+    int numOfficers = 0;                      // total number of staff officer registered
+    int lastOfficer = 0;                      // track the last index of advance cadets
+    User *staffOfficers = new User[MAX_USER]; // dynamic array to store staff officers
 
-    int numBrigades = 0;
-    int lastBrigade = 0;
-    User *brigadeStaffs = new User[MAX_USER];
+    // Brigade Staffs Main Variables
+    int numBrigades = 0;                      // total number of brigade staff registered
+    int lastBrigade = 0;                      // track the last index of brigade staff
+    User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
     option = userMenu("Main"); // Main Menu
 
     switch (option)
     {
     case 1: // Registration Section
+
         // Role Based Registration
         role = userMenu("Role"); // Role Menu
 
