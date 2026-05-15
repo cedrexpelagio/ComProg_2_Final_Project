@@ -16,9 +16,9 @@ struct User
     string platoon = "";
     string status = "";
     string role = "";
-    string rank = "";  // For advance cadets, staff officers and brigade staff
-    string staff = ""; // For staff officers and brigade staff
-    string password = "";// User Password
+    string rank = "";     // For advance cadets, staff officers and brigade staff
+    string staff = "";    // For staff officers and brigade staff
+    string password = ""; // User Password
     int numPresent = 0;
     int numAbsent = 0;
     int numExcuse = 0;
@@ -102,7 +102,6 @@ void selectUnit(User *basicCadets, int index, string type)
 void registerUser(User *user, int index)
 {
     cin.ignore();
-    cout << "Student Information:\n\n";
     cout << "Full Name(ex. CRUZ JOSE A)   : ";
     getline(cin, (user + index)->userName);
     cout << "Student ID(ex. LQ-00093-2025): ";
@@ -127,8 +126,25 @@ void registerStaff(User *user, int index)
 }
 
 // Function that auto generate the user's password
-string generatePassword(User *user, int index){
+string generatePassword(User *user, int index)
+{
+    string password = ""; // Store the user password
+    string userIndex = to_string(index);
 
+    // Extract last name (first word of userName)
+    string fullName = (user + index)->userName;
+    string lastName = fullName.substr(0, fullName.find(" "));
+
+    string studentID = (user + index)->studentID;
+
+    // Find positions of the dashes
+    int firstDash = studentID.find("-");
+    int secondDash = studentID.find("-", firstDash + 1);
+
+    // Extract between first and second dash
+    string idNumber = studentID.substr(firstDash + 1, secondDash - firstDash - 1);
+    password = lastName + "-" + idNumber + "-" + userIndex;
+    return password;
 }
 
 // Function to register a user
@@ -157,6 +173,12 @@ void registerUser(User *user, int *index, int *numberOfUser)
         registerRank(user, *index);
         registerStaff(user, *index);
     }
+
+    (user + *index)->password = generatePassword(user, *index);
+
+    cout << "\nUser Name: " << (user + *index)->userName << endl;
+    cout << "Your Password: " << (user + *index)->password << endl;
+    cout << "Please Save your password!\n";
 
     cout << "\nRegistration Complete!\n";
 
