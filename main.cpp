@@ -241,9 +241,8 @@ bool verifyPassword(User *user, string password, int index)
 }
 
 // Function for user log in 
-void userLogIn(User *user, int numUser)
+void userLogIn(User *user, int numUser, int *index)
 {
-    int index = 0;// Store the user index 
     string userName = "";
     string password = "";
     bool verification = false;
@@ -254,7 +253,7 @@ void userLogIn(User *user, int numUser)
         cout << "User Name: ";
         getline(cin, userName);
         // Verify the user name 
-        verification = verifyUserName(user, userName, numUser, &index);
+        verification = verifyUserName(user, userName, numUser, index);
     } while (!verification);// Loop if the user do not exist
 
     do
@@ -262,14 +261,30 @@ void userLogIn(User *user, int numUser)
         cout << "Password : ";
         cin >> password;
         // Verify the password
-        verification = verifyPassword(user, password, index);
+        verification = verifyPassword(user, password, *index);
     } while (!verification);// Loop if the password is incorrect
+}
+
+// Function for debugging 
+void cadetProfile (User *user, int index){
+    cout << "Name    : " << (user + index)->userName << "\n";
+    cout << "ID      : " << (user + index)->studentID << "\n";
+    cout << "Program : " << (user + index)->program << "\n";
+    cout << "Company : " << (user + index)->company << "\n";
+    cout << "Platoon : " << (user + index)->platoon << "\n";
+    cout << "Role    : " << (user + index)->role << "\n";
+    cout << "Rank    : " << (user + index)->rank << "\n";
+}
+
+void cadetsFeature(User *user, int index){
+cadetProfile(user, index);
 }
 
 int main()
 {
     int option = 0; // Store the user's option
     int role = 0;   // Store the user's role
+    int userIndex = 0;// Store the user's index in logging in
 
     // Basic Cadets Main Variables
     int numCadets = 0;                      // total number of basic cadets registered
@@ -283,7 +298,7 @@ int main()
 
     // Staff Officers Main Variables
     int numOfficers = 0;                      // total number of staff officer registered
-    int lastOfficer = 0;                      // track the last index of advance cadets
+    int lastOfficer = 0;                      // track the last index of staff officer
     User *staffOfficers = new User[MAX_USER]; // dynamic array to store staff officers
 
     // Brigade Staffs Main Variables
@@ -291,7 +306,7 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
-    while (true)
+    while (true)// Debugging condition
     {
         option = userMenu("Main"); // Main Menu
 
@@ -331,16 +346,17 @@ int main()
             switch (role)
             {
             case 1: // Basic Cadets
-                userLogIn(basicCadets, numCadets);
+                userLogIn(basicCadets, numCadets, &userIndex);
+                cadetsFeature(basicCadets, userIndex);
                 break;
             case 2: // Advance Cadets
-                userLogIn(advanceCadets, numAdvanceCadets);
+                userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
                 break;
             case 3: // Staff Officers
-                userLogIn(staffOfficers, numOfficers);
+                userLogIn(staffOfficers, numOfficers, &userIndex);
                 break;
             case 4: // Brigade Staff
-                userLogIn(brigadeStaffs, numBrigades);
+                userLogIn(brigadeStaffs, numBrigades, &userIndex);
                 break;
             }
 
