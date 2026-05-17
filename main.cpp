@@ -206,6 +206,66 @@ void roleConverter(User *user, int role, int index)
     }
 }
 
+// Function that verify the user name
+bool verifyUserName(User *user, string userName, int numUser, int *index)
+{
+// Linear Search to search if the user name exist
+    for (int i = 0; i < numUser; i++)
+    {
+        if (userName == (user + i)->userName)// Condition to verify the user name
+        {
+            cout << "Name Exist\n";
+            *index = i;// Store the index of the user
+            return true;// return if the user name exist
+        }
+    }
+
+    cout << "No Name Found\n";
+    return false;// return if the user name is not found 
+}
+
+// Function that verify the user's password
+bool verifyPassword(User *user, string password, int index)
+{
+
+    if (password == (user + index)->password)//Condition to verify the password
+    {
+        cout << "Password Correct\n";
+        return true;// return if the password is correct
+    }
+    else
+    {
+        cout << "Password Incorrect\n";
+        return false;// return if the password is incorrect
+    }
+}
+
+// Function for user log in 
+void userLogIn(User *user, int numUser)
+{
+    int index = 0;// Store the user index 
+    string userName = "";
+    string password = "";
+    bool verification = false;
+
+    cin.ignore();
+    do
+    {
+        cout << "User Name: ";
+        getline(cin, userName);
+        // Verify the user name 
+        verification = verifyUserName(user, userName, numUser, &index);
+    } while (!verification);// Loop if the user do not exist
+
+    do
+    {
+        cout << "Password : ";
+        cin >> password;
+        // Verify the password
+        verification = verifyPassword(user, password, index);
+    } while (!verification);// Loop if the password is incorrect
+}
+
 int main()
 {
     int option = 0; // Store the user's option
@@ -231,42 +291,64 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
-    option = userMenu("Main"); // Main Menu
-
-    switch (option)
+    while (true)
     {
-    case 1: // Registration Section
+        option = userMenu("Main"); // Main Menu
 
-        // Role Based Registration
-        role = userMenu("Role"); // Role Menu
-
-        switch (role)
+        switch (option)
         {
-        case 1: // Basic Cadets
-            roleConverter(basicCadets, role, lastCadet);
-            registerUser(basicCadets, &lastCadet, &numCadets);
+        case 1: // Registration Section
+
+            // Role Based Registration
+            role = userMenu("Role"); // Role Menu
+
+            switch (role)
+            {
+            case 1: // Basic Cadets
+                roleConverter(basicCadets, role, lastCadet);
+                registerUser(basicCadets, &lastCadet, &numCadets);
+                break;
+            case 2: // Advance Cadets
+                roleConverter(advanceCadets, role, lastAdvanceCadet);
+                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets);
+                break;
+            case 3: // Staff Officers
+                roleConverter(staffOfficers, role, lastOfficer);
+                registerUser(staffOfficers, &lastOfficer, &numOfficers);
+                break;
+            case 4: // Brigade Staff
+                roleConverter(brigadeStaffs, role, lastBrigade);
+                registerUser(brigadeStaffs, &lastBrigade, &numBrigades);
+                break;
+            }
+
             break;
-        case 2: // Advance Cadets
-            roleConverter(advanceCadets, role, lastAdvanceCadet);
-            registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets);
+        case 2: // Log In
+
+            // Role Based Log In
+            role = userMenu("Role"); // Role Menu
+
+            switch (role)
+            {
+            case 1: // Basic Cadets
+                userLogIn(basicCadets, numCadets);
+                break;
+            case 2: // Advance Cadets
+                userLogIn(advanceCadets, numAdvanceCadets);
+                break;
+            case 3: // Staff Officers
+                userLogIn(staffOfficers, numOfficers);
+                break;
+            case 4: // Brigade Staff
+                userLogIn(brigadeStaffs, numBrigades);
+                break;
+            }
+
             break;
-        case 3: // Staff Officers
-            roleConverter(staffOfficers, role, lastOfficer);
-            registerUser(staffOfficers, &lastOfficer, &numOfficers);
-            break;
-        case 4: // Brigade Staff
-            roleConverter(brigadeStaffs, role, lastBrigade);
-            registerUser(brigadeStaffs, &lastBrigade, &numBrigades);
+        case 3: // Exit
+            cout << "\nThank you for using UnitSync!\n";
             break;
         }
-
-        break;
-    case 2: // Log In
-        cout << "\nComing Soon..\n";
-        break;
-    case 3: // Exit
-        cout << "\nThank you for using UnitSync!\n";
-        break;
     }
 
     // Free Memory
