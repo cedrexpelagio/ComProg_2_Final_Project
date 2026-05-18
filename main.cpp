@@ -46,6 +46,14 @@ void displayUserMenu(string typeMenu)
         cout << "3. Staff Officer\n";
         cout << "4. Brigade Staff\n";
     }
+    else if (typeMenu == "Cadets Menu")
+    {
+        cout << "Menu\n";
+        cout << "1. View My Profile\n";
+        cout << "2. Announcements\n";
+        cout << "3. View My Attendance\n";
+        cout << "4. Exit\n";
+    }
 }
 
 // Function that returns the user choice in the main menu
@@ -132,6 +140,7 @@ void registerStaff(User *user, int index)
     getline(cin, (user + index)->staff);
 }
 
+// Function that removes the space in text
 string spaceRemover(string text)
 {
     string result = "";
@@ -143,6 +152,7 @@ string spaceRemover(string text)
     return result;
 }
 
+// Function that auto generate the user's name in a format
 string generateUserName(User *user, int index)
 {
     string noSpaceLastName = "",
@@ -313,7 +323,23 @@ void cadetProfile(User *user, int index)
 
 void cadetsFeature(User *user, int index)
 {
-    cadetProfile(user, index);
+    int choice = 0;
+    choice = userMenu("Cadets Menu");
+
+    switch (choice)
+    {
+    case 1:
+        cadetProfile(user, index);
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    default:
+        break;
+    }
 }
 
 int main()
