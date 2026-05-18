@@ -10,6 +10,9 @@ const int MAX_USER = 100;
 struct User
 {
     string userName = "";
+    string lastName = "";
+    string sureName = "";
+    string middleName = "";
     string studentID = "";
     string program = "";
     string company = "";
@@ -102,8 +105,12 @@ void selectUnit(User *basicCadets, int index, string type)
 void registerUser(User *user, int index)
 {
     cin.ignore();
-    cout << "Full Name(ex. CRUZ JOSE A)   : ";
-    getline(cin, (user + index)->userName);
+    cout << "Last Name(ex. DELA CRUZ)   : ";
+    getline(cin, (user + index)->lastName);
+    cout << "Sure Name(ex. JUAN)   : ";
+    getline(cin, (user + index)->sureName);
+    cout << "Middle Name(ex. REYES)   : ";
+    getline(cin, (user + index)->middleName);
     cout << "Student ID(ex. LQ-00093-2025): ";
     getline(cin, (user + index)->studentID);
     cout << "Program(ex. BSCE-1-1)        : ";
@@ -125,6 +132,31 @@ void registerStaff(User *user, int index)
     getline(cin, (user + index)->staff);
 }
 
+string spaceRemover(string text)
+{
+    string result = "";
+    for (char c : text)
+    {
+        if (c != ' ')
+            result += c;
+    }
+    return result;
+}
+
+string generateUserName(User *user, int index)
+{
+    string noSpaceLastName = "",
+           noSpaceSureName = "",
+           userName = "";
+
+    noSpaceLastName = spaceRemover((user + index)->lastName);
+    noSpaceSureName = spaceRemover((user + index)->sureName);
+
+    userName = noSpaceLastName + "." + noSpaceSureName;
+
+    return userName;
+}
+
 // Function that auto generate the user's password
 string generatePassword(User *user, int index)
 {
@@ -133,7 +165,7 @@ string generatePassword(User *user, int index)
 
     // Extract last name (first word of userName)
     string fullName = (user + index)->userName;
-    string lastName = fullName.substr(0, fullName.find(" "));
+    string lastName = spaceRemover((user + index)->lastName);
 
     string studentID = (user + index)->studentID;
 
@@ -144,6 +176,7 @@ string generatePassword(User *user, int index)
     // Extract between first and second dash
     string idNumber = studentID.substr(firstDash + 1, secondDash - firstDash - 1);
     password = lastName + "-" + idNumber + "-" + userIndex;
+
     return password;
 }
 
@@ -175,6 +208,7 @@ void registerUser(User *user, int *index, int *numberOfUser)
     }
 
     (user + *index)->password = generatePassword(user, *index);
+    (user + *index)->userName = generateUserName(user, *index);
 
     cout << "\nUser Name: " << (user + *index)->userName << endl;
     cout << "Your Password: " << (user + *index)->password << endl;
@@ -209,38 +243,38 @@ void roleConverter(User *user, int role, int index)
 // Function that verify the user name
 bool verifyUserName(User *user, string userName, int numUser, int *index)
 {
-// Linear Search to search if the user name exist
+    // Linear Search to search if the user name exist
     for (int i = 0; i < numUser; i++)
     {
-        if (userName == (user + i)->userName)// Condition to verify the user name
+        if (userName == (user + i)->userName) // Condition to verify the user name
         {
             cout << "Name Exist\n";
-            *index = i;// Store the index of the user
-            return true;// return if the user name exist
+            *index = i;  // Store the index of the user
+            return true; // return if the user name exist
         }
     }
 
     cout << "No Name Found\n";
-    return false;// return if the user name is not found 
+    return false; // return if the user name is not found
 }
 
 // Function that verify the user's password
 bool verifyPassword(User *user, string password, int index)
 {
 
-    if (password == (user + index)->password)//Condition to verify the password
+    if (password == (user + index)->password) // Condition to verify the password
     {
         cout << "Password Correct\n";
-        return true;// return if the password is correct
+        return true; // return if the password is correct
     }
     else
     {
         cout << "Password Incorrect\n";
-        return false;// return if the password is incorrect
+        return false; // return if the password is incorrect
     }
 }
 
-// Function for user log in 
+// Function for user log in
 void userLogIn(User *user, int numUser, int *index)
 {
     string userName = "";
@@ -252,9 +286,9 @@ void userLogIn(User *user, int numUser, int *index)
     {
         cout << "User Name: ";
         getline(cin, userName);
-        // Verify the user name 
+        // Verify the user name
         verification = verifyUserName(user, userName, numUser, index);
-    } while (!verification);// Loop if the user do not exist
+    } while (!verification); // Loop if the user do not exist
 
     do
     {
@@ -262,11 +296,12 @@ void userLogIn(User *user, int numUser, int *index)
         cin >> password;
         // Verify the password
         verification = verifyPassword(user, password, *index);
-    } while (!verification);// Loop if the password is incorrect
+    } while (!verification); // Loop if the password is incorrect
 }
 
-// Function for debugging 
-void cadetProfile (User *user, int index){
+// Function for debugging
+void cadetProfile(User *user, int index)
+{
     cout << "Name    : " << (user + index)->userName << "\n";
     cout << "ID      : " << (user + index)->studentID << "\n";
     cout << "Program : " << (user + index)->program << "\n";
@@ -276,15 +311,16 @@ void cadetProfile (User *user, int index){
     cout << "Rank    : " << (user + index)->rank << "\n";
 }
 
-void cadetsFeature(User *user, int index){
-cadetProfile(user, index);
+void cadetsFeature(User *user, int index)
+{
+    cadetProfile(user, index);
 }
 
 int main()
 {
-    int option = 0; // Store the user's option
-    int role = 0;   // Store the user's role
-    int userIndex = 0;// Store the user's index in logging in
+    int option = 0;    // Store the user's option
+    int role = 0;      // Store the user's role
+    int userIndex = 0; // Store the user's index in logging in
 
     // Basic Cadets Main Variables
     int numCadets = 0;                      // total number of basic cadets registered
@@ -306,7 +342,7 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
-    while (true)// Debugging condition
+    while (true) // Debugging condition
     {
         option = userMenu("Main"); // Main Menu
 
