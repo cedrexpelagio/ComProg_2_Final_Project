@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 // UnitSync
 
 const int MAX_USER = 100;
+const int NUM_TRAINING_DAY = 15;
 
 // Struct for User's data
 struct User
@@ -17,7 +19,7 @@ struct User
     string program = "";
     string company = "";
     string platoon = "";
-    string status = "";
+    string status[NUM_TRAINING_DAY] = {""};
     string role = "";
     string rank = "";     // For advance cadets, staff officers and brigade staff
     string staff = "";    // For staff officers and brigade staff
@@ -76,7 +78,8 @@ void selectUnit(User *basicCadets, int index, string type)
     // Stores the company and platoon type
     string unit[2][4] = {
         {"Alpha", "Bravo", "Charlie", "Delta"},                        // row 0
-        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}}; // row 1
+        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}
+    }; // row 1
 
     // Identify the value of row based on the type
     if (type == "Company")
@@ -312,13 +315,37 @@ void userLogIn(User *user, int numUser, int *index)
 // Function for debugging
 void cadetProfile(User *user, int index)
 {
-    cout << "Name    : " << (user + index)->userName << "\n";
-    cout << "ID      : " << (user + index)->studentID << "\n";
-    cout << "Program : " << (user + index)->program << "\n";
-    cout << "Company : " << (user + index)->company << "\n";
-    cout << "Platoon : " << (user + index)->platoon << "\n";
-    cout << "Role    : " << (user + index)->role << "\n";
-    cout << "Rank    : " << (user + index)->rank << "\n";
+    cout << "User Name  : " << (user + index)->userName << "\n";
+    cout << "Last Name  : " << (user + index)->lastName << "\n";
+    cout << "Sure Name  : " << (user + index)->sureName << "\n";
+    cout << "Middle Name: " << (user + index)->middleName << "\n";
+    cout << "Student ID : " << (user + index)->studentID << "\n";
+    cout << "Program    : " << (user + index)->program << "\n";
+    cout << "Company    : " << (user + index)->company << "\n";
+    cout << "Platoon    : " << (user + index)->platoon << "\n";
+    cout << "Role       : " << (user + index)->role << "\n";
+    cout << "Rank       : " << (user + index)->rank << "\n";
+}
+
+void viewAttendance(User *user, int index)
+{
+    
+    cout << setw(15) << left << "TRAINING DAY";
+    for (int i = 0; i < NUM_TRAINING_DAY; i++) {
+        if (i < 9) {
+            cout << "0";
+        }
+        cout << to_string(i + 1) << " ";
+    }
+    cout << endl;
+
+    cout << setw(14) << left << "STATUS";
+    cout << "|";
+    for (int i = 0; i < NUM_TRAINING_DAY; i++) {
+        (user + index)->status[i] = "--";
+        cout << (user + index)->status[i] << "|";
+    }
+    cout << endl;
 }
 
 void cadetsFeature(User *user, int index)
@@ -332,8 +359,10 @@ void cadetsFeature(User *user, int index)
         cadetProfile(user, index);
         break;
     case 2:
+        cout << "Coming Soon";
         break;
     case 3:
+        viewAttendance(user, index);
         break;
     case 4:
         break;
