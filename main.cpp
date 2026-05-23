@@ -78,8 +78,7 @@ void selectUnit(User *basicCadets, int index, string type)
     // Stores the company and platoon type
     string unit[2][4] = {
         {"Alpha", "Bravo", "Charlie", "Delta"},                        // row 0
-        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}
-    }; // row 1
+        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}}; // row 1
 
     // Identify the value of row based on the type
     if (type == "Company")
@@ -132,8 +131,8 @@ void registerUser(User *user, int index)
 void registerRank(User *user, int index)
 {
     cout << "Rank(ex. C/1LT): ";
-    cin.ignore();
     getline(cin, (user + index)->rank);
+    cout << "Rank DEBUG: "  << (user + index)->rank;
 }
 
 // Function to register the staff of advance cadets, staff officer and brigade staff
@@ -176,8 +175,6 @@ string generatePassword(User *user, int index)
     string password = ""; // Store the user password
     string userIndex = to_string(index);
 
-    // Extract last name (first word of userName)
-    string fullName = (user + index)->userName;
     string lastName = spaceRemover((user + index)->lastName);
 
     string studentID = (user + index)->studentID;
@@ -220,8 +217,8 @@ void registerUser(User *user, int *index, int *numberOfUser)
         registerStaff(user, *index);
     }
 
-    (user + *index)->password = generatePassword(user, *index);
     (user + *index)->userName = generateUserName(user, *index);
+    (user + *index)->password = generatePassword(user, *index);
 
     cout << "\nUser Name: " << (user + *index)->userName << endl;
     cout << "Your Password: " << (user + *index)->password << endl;
@@ -335,19 +332,22 @@ void viewAttendance(User *user, int index)
     cout << endl;
     // Display the number of training days
     cout << setw(15) << left << "TRAINING DAY";
-    for (int i = 0; i < NUM_TRAINING_DAY; i++) {
-        if (i < 9) {
+    for (int i = 0; i < NUM_TRAINING_DAY; i++)
+    {
+        if (i < 9)
+        {
             cout << "0";
         }
         cout << to_string(i + 1) << " ";
     }
     cout << endl;
 
-    // Display the user's status in -- form 
+    // Display the user's status in -- form
     // WIP: the -- will be converted into colored text to represent the user's status
     cout << setw(14) << left << "STATUS";
     cout << "|";
-    for (int i = 0; i < NUM_TRAINING_DAY; i++) {
+    for (int i = 0; i < NUM_TRAINING_DAY; i++)
+    {
         (user + index)->status[i] = "--";
         cout << (user + index)->status[i] << "|";
     }
@@ -355,37 +355,36 @@ void viewAttendance(User *user, int index)
     cout << endl;
 }
 
-// Function for every user's feature 
+// Function for every user's feature
 void usersFeature(User *user, int index)
 {
-    string role = (user + index)->role;// Store the user's role
+    string role = (user + index)->role; // Store the user's role
 
     int choice = 0;
 
     // Feature for basic and advance cadets
-    if (role == "Basic Cadet" || role == "Advance Cadet"){
-
-    choice = userMenu("Cadets Menu"); // Displat the menu
-
-    switch (choice)
+    if (role == "Basic Cadet" || role == "Advance Cadet")
     {
-    case 1: // Display the user's personal information
-        viewProfile(user, index);
-        break;
-    case 2:
-        cout << "Coming Soon";
-        break;
-    case 3: // Display the user's attendance and status 
-        viewAttendance(user, index);
-        break;
-    case 4:
-        break;
-    default:
-        break;
-    }
 
-    }
+        choice = userMenu("Cadets Menu"); // Display the menu
 
+        switch (choice)
+        {
+        case 1: // Display the user's personal information
+            viewProfile(user, index);
+            break;
+        case 2:
+            cout << "Coming Soon";
+            break;
+        case 3: // Display the user's attendance and status
+            viewAttendance(user, index);
+            break;
+        case 4:
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 int main()
