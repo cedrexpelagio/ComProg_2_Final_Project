@@ -312,8 +312,9 @@ void userLogIn(User *user, int numUser, int *index)
     } while (!verification); // Loop if the password is incorrect
 }
 
-// Function for debugging
-void cadetProfile(User *user, int index)
+// Function to display the user's personal information
+// Still WIP, the UI will be improved in later phase
+void viewProfile(User *user, int index)
 {
     cout << "User Name  : " << (user + index)->userName << "\n";
     cout << "Last Name  : " << (user + index)->lastName << "\n";
@@ -327,9 +328,12 @@ void cadetProfile(User *user, int index)
     cout << "Rank       : " << (user + index)->rank << "\n";
 }
 
+// Function the display the user's attendance and status
+// Still WIP, the UI will be improved in later phase
 void viewAttendance(User *user, int index)
 {
-    
+    cout << endl;
+    // Display the number of training days
     cout << setw(15) << left << "TRAINING DAY";
     for (int i = 0; i < NUM_TRAINING_DAY; i++) {
         if (i < 9) {
@@ -339,29 +343,39 @@ void viewAttendance(User *user, int index)
     }
     cout << endl;
 
+    // Display the user's status in -- form 
+    // WIP: the -- will be converted into colored text to represent the user's status
     cout << setw(14) << left << "STATUS";
     cout << "|";
     for (int i = 0; i < NUM_TRAINING_DAY; i++) {
         (user + index)->status[i] = "--";
         cout << (user + index)->status[i] << "|";
     }
+
     cout << endl;
 }
 
-void cadetsFeature(User *user, int index)
+// Function for every user's feature 
+void usersFeature(User *user, int index)
 {
+    string role = (user + index)->role;// Store the user's role
+
     int choice = 0;
-    choice = userMenu("Cadets Menu");
+
+    // Feature for basic and advance cadets
+    if (role == "Basic Cadet" || role == "Advance Cadet"){
+
+    choice = userMenu("Cadets Menu"); // Displat the menu
 
     switch (choice)
     {
-    case 1:
-        cadetProfile(user, index);
+    case 1: // Display the user's personal information
+        viewProfile(user, index);
         break;
     case 2:
         cout << "Coming Soon";
         break;
-    case 3:
+    case 3: // Display the user's attendance and status 
         viewAttendance(user, index);
         break;
     case 4:
@@ -369,6 +383,9 @@ void cadetsFeature(User *user, int index)
     default:
         break;
     }
+
+    }
+
 }
 
 int main()
@@ -438,10 +455,11 @@ int main()
             {
             case 1: // Basic Cadets
                 userLogIn(basicCadets, numCadets, &userIndex);
-                cadetsFeature(basicCadets, userIndex);
+                usersFeature(basicCadets, userIndex);
                 break;
             case 2: // Advance Cadets
                 userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
+                usersFeature(advanceCadets, userIndex);
                 break;
             case 3: // Staff Officers
                 userLogIn(staffOfficers, numOfficers, &userIndex);
