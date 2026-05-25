@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <fstream>
 
 using namespace std;
 // UnitSync
@@ -132,7 +133,6 @@ void registerRank(User *user, int index)
 {
     cout << "Rank(ex. C/1LT): ";
     getline(cin, (user + index)->rank);
-    cout << "Rank DEBUG: "  << (user + index)->rank;
 }
 
 // Function to register the staff of advance cadets, staff officer and brigade staff
@@ -190,8 +190,49 @@ string generatePassword(User *user, int index)
     return password;
 }
 
+void saveUser(User *user, int index, string fileName)
+{
+    fstream file;
+    file.open(fileName, ios::app);
+
+    if (file.is_open())
+    {
+        file << (user + index)->userName << ",";
+        file << (user + index)->lastName << ",";
+        file << (user + index)->sureName << ",";
+        file << (user + index)->middleName << ",";
+        file << (user + index)->studentID << ",";
+        file << (user + index)->program << ",";
+        file << (user + index)->company << ",";
+        file << (user + index)->platoon << ",";
+        file << (user + index)->role << ",";
+        file << (user + index)->rank << ",";
+        file << (user + index)->staff << ",";
+        file << (user + index)->password << ",";
+        file << (user + index)->numPresent << ",";
+        file << (user + index)->numAbsent << ",";
+        file << (user + index)->numExcuse << ",";
+
+        // Save status array
+        for (int i = 0; i < NUM_TRAINING_DAY; i++)
+        {
+            if ((user + index)->status[i].empty())
+                file << "--";
+            else
+                file << (user + index)->status[i];
+
+            if (i < NUM_TRAINING_DAY - 1)
+            {
+                file << ",";
+            }
+        }
+
+        file << "\n";
+        file.close();
+    }
+}
 // Function to register a user
-void registerUser(User *user, int *index, int *numberOfUser)
+void registerUser(User *user, int *index, int *numberOfUser, string fileName)
 {
     // Store the role
     string role = (user + *index)->role;
@@ -224,6 +265,7 @@ void registerUser(User *user, int *index, int *numberOfUser)
     cout << "Your Password: " << (user + *index)->password << endl;
     cout << "Please Save your password!\n";
 
+    saveUser(user, *index, fileName);
     cout << "\nRegistration Complete!\n";
 
     (*index)++;
@@ -428,19 +470,19 @@ int main()
             {
             case 1: // Basic Cadets
                 roleConverter(basicCadets, role, lastCadet);
-                registerUser(basicCadets, &lastCadet, &numCadets);
+                registerUser(basicCadets, &lastCadet, &numCadets, "basiCadet.txt");
                 break;
             case 2: // Advance Cadets
                 roleConverter(advanceCadets, role, lastAdvanceCadet);
-                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets);
+                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets, "advanceCadet.txt");
                 break;
             case 3: // Staff Officers
                 roleConverter(staffOfficers, role, lastOfficer);
-                registerUser(staffOfficers, &lastOfficer, &numOfficers);
+                registerUser(staffOfficers, &lastOfficer, &numOfficers, "staffOfficer.txt");
                 break;
             case 4: // Brigade Staff
                 roleConverter(brigadeStaffs, role, lastBrigade);
-                registerUser(brigadeStaffs, &lastBrigade, &numBrigades);
+                registerUser(brigadeStaffs, &lastBrigade, &numBrigades, "brigadeStaff.txt");
                 break;
             }
 
