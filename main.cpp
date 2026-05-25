@@ -2,6 +2,7 @@
 #include <string>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 // UnitSync
@@ -190,11 +191,14 @@ string generatePassword(User *user, int index)
     return password;
 }
 
+// Function for saving the user in a file based on their role
 void saveUser(User *user, int index, string fileName)
 {
     fstream file;
+
     file.open(fileName, ios::app);
 
+    // Save structure members
     if (file.is_open())
     {
         file << (user + index)->userName << ",";
@@ -231,6 +235,71 @@ void saveUser(User *user, int index, string fileName)
         file.close();
     }
 }
+
+// Function that load users from file
+int loadUser(User *user, string fileName)
+{
+    fstream file;
+
+    file.open(fileName, ios::in);
+
+    if (!file.is_open())
+    {
+        cout << "File could not be opened.\n";
+        return 0;
+    }
+
+    string line;
+    int index = 0;
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        string temp;
+
+        getline(ss, (user + index)->userName, ',');
+        getline(ss, (user + index)->lastName, ',');
+        getline(ss, (user + index)->sureName, ',');
+        getline(ss, (user + index)->middleName, ',');
+        getline(ss, (user + index)->studentID, ',');
+        getline(ss, (user + index)->program, ',');
+        getline(ss, (user + index)->company, ',');
+        getline(ss, (user + index)->platoon, ',');
+        getline(ss, (user + index)->role, ',');
+        getline(ss, (user + index)->rank, ',');
+        getline(ss, (user + index)->staff, ',');
+        getline(ss, (user + index)->password, ',');
+
+        // Convert string to int
+        getline(ss, temp, ',');
+        (user + index)->numPresent = stoi(temp);
+
+        getline(ss, temp, ',');
+        (user + index)->numAbsent = stoi(temp);
+
+        getline(ss, temp, ',');
+        (user + index)->numExcuse = stoi(temp);
+
+        // Load status array
+        for (int i = 0; i < NUM_TRAINING_DAY; i++)
+        {
+            getline(ss, (user + index)->status[i], ',');
+
+            // Convert "--" back to empty string
+            if ((user + index)->status[i] == "--")
+            {
+                (user + index)->status[i] = "";
+            }
+        }
+
+        index++;
+    }
+
+    file.close();
+
+    return index; // returns number of users loaded
+}
+
 // Function to register a user
 void registerUser(User *user, int *index, int *numberOfUser, string fileName)
 {
@@ -455,6 +524,19 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
+
+    // Load all users from files
+    lastCadet = loadUser(basicCadets, "basicCadet.txt");
+    lastAdvanceCadet = loadUser(advanceCadets, "advanceCadet.txt");
+    lastOfficer = loadUser(staffOfficers, "staffOfficer.txt");
+    lastBrigade = loadUser(brigadeStaffs, "brigadeStaff.txt");
+
+    // Store the number of user in different role 
+    numCadets = lastCadet;
+    numAdvanceCadets = lastAdvanceCadet;
+    numOfficers = lastOfficer;
+    numBrigades = lastBrigade;
+
     while (true) // Debugging condition
     {
         option = userMenu("Main"); // Main Menu
@@ -470,7 +552,7 @@ int main()
             {
             case 1: // Basic Cadets
                 roleConverter(basicCadets, role, lastCadet);
-                registerUser(basicCadets, &lastCadet, &numCadets, "basiCadet.txt");
+                registerUser(basicCadets, &lastCadet, &numCadets, "basicCadet.txt");
                 break;
             case 2: // Advance Cadets
                 roleConverter(advanceCadets, role, lastAdvanceCadet);
