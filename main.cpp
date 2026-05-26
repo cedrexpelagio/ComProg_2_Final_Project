@@ -10,6 +10,12 @@ using namespace std;
 const int MAX_USER = 100;
 const int NUM_TRAINING_DAY = 15;
 
+// Add at top with your other constants
+const string FILE_BASIC    = "basicCadet.txt";
+const string FILE_ADVANCE  = "advanceCadet.txt";
+const string FILE_OFFICER  = "staffOfficer.txt";
+const string FILE_BRIGADE  = "brigadeStaff.txt";
+
 // Struct for User's data
 struct User
 {
@@ -474,13 +480,23 @@ void viewAttendance(User *user, int index)
     cout << endl;
 }
 
-// Function for cadets feature
+// Function for all user feature
 void usersFeature(User *user, int index)
 {
-    string role = (user + index)->role; // Store the user's role
+    string role = (user + index)->role;   // Store the user's role
+    string staff = (user + index)->staff; // Store the staff designation of the user
     bool running = true;
 
     int choice = 0;
+
+    // Load all users
+    User *basicCadets = new User[MAX_USER];
+    User *advanceCadets = new User[MAX_USER];
+    User *staffOfficers = new User[MAX_USER];
+    // Store the number of user based on type
+    int numCadets = loadUser(basicCadets, FILE_BASIC);
+    int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
+    int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
 
     // Feature for basic and advance cadets
     if (role == "Basic Cadet" || role == "Advance Cadet")
@@ -509,44 +525,42 @@ void usersFeature(User *user, int index)
             }
         }
     }
-}
-
-// Function for staff officer's feature
-void usersFeature(User *user, int index, User *cadet, int numCadet)
-{
-    string staff = (user + index)->staff; // Store the staff designation of the user
-    bool running = true;
-
-    int choice = 0;
-
-    while (running)
+    else if (role == "Staff Officer")
     {
-        choice = userMenu("Staff Officer Menu"); // Display the menu
-
-        switch (choice)
+        while (running)
         {
-        case 1: // Display the user's personal information
-            viewProfile(user, index);
-            break;
-        case 2: // Take Attendance: Basic Cadets or Advance Cadets
-            if (staff == "S1")
+            choice = userMenu("Staff Officer Menu"); // Display the menu
+
+            switch (choice)
             {
-                // Basic Cadets
+            case 1: // Display the user's personal information
+                viewProfile(user, index);
+                break;
+            case 2: // Take Attendance: Basic Cadets or Advance Cadets
+                if (staff == "S1")
+                {
+                    // Basic Cadets
+                }
+                else if (staff == "S3")
+                {
+                    // Advance Cadets
+                }
+                break;
+            case 3: // View Announcements
+                break;
+            case 4: // Log out
+                running = false;
+                break;
+            default:
+                break;
             }
-            else if (staff == "S3")
-            {
-                // Advance Cadets
-            }
-            break;
-        case 3: // View Announcements
-            break;
-        case 4: // Log out
-            running = false;
-            break;
-        default:
-            break;
         }
     }
+
+    delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;
+
 }
 
 int main()
@@ -577,10 +591,10 @@ int main()
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
     // Load all users from files
-    lastCadet = loadUser(basicCadets, "basicCadet.txt");
-    lastAdvanceCadet = loadUser(advanceCadets, "advanceCadet.txt");
-    lastOfficer = loadUser(staffOfficers, "staffOfficer.txt");
-    lastBrigade = loadUser(brigadeStaffs, "brigadeStaff.txt");
+    lastCadet = loadUser(basicCadets, FILE_BASIC);
+    lastAdvanceCadet = loadUser(advanceCadets, FILE_ADVANCE);
+    lastOfficer = loadUser(staffOfficers, FILE_OFFICER);
+    lastBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
 
     // Store the number of user in different role
     numCadets = lastCadet;
@@ -603,19 +617,19 @@ int main()
             {
             case 1: // Basic Cadets
                 roleConverter(basicCadets, role, lastCadet);
-                registerUser(basicCadets, &lastCadet, &numCadets, "basicCadet.txt");
+                registerUser(basicCadets, &lastCadet, &numCadets, FILE_BASIC);
                 break;
             case 2: // Advance Cadets
                 roleConverter(advanceCadets, role, lastAdvanceCadet);
-                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets, "advanceCadet.txt");
+                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets, FILE_ADVANCE);
                 break;
             case 3: // Staff Officers
                 roleConverter(staffOfficers, role, lastOfficer);
-                registerUser(staffOfficers, &lastOfficer, &numOfficers, "staffOfficer.txt");
+                registerUser(staffOfficers, &lastOfficer, &numOfficers, FILE_OFFICER);
                 break;
             case 4: // Brigade Staff
                 roleConverter(brigadeStaffs, role, lastBrigade);
-                registerUser(brigadeStaffs, &lastBrigade, &numBrigades, "brigadeStaff.txt");
+                registerUser(brigadeStaffs, &lastBrigade, &numBrigades, FILE_BRIGADE);
                 break;
             }
 
@@ -637,6 +651,7 @@ int main()
                 break;
             case 3: // Staff Officers
                 userLogIn(staffOfficers, numOfficers, &userIndex);
+                usersFeature(staffOfficers, userIndex);
                 break;
             case 4: // Brigade Staff
                 userLogIn(brigadeStaffs, numBrigades, &userIndex);
