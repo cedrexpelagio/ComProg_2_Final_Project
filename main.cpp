@@ -470,6 +470,7 @@ void viewAttendance(User *user, int index)
 void usersFeature(User *user, int index)
 {
     string role = (user + index)->role; // Store the user's role
+    bool running = true;
 
     int choice = 0;
 
@@ -477,32 +478,37 @@ void usersFeature(User *user, int index)
     if (role == "Basic Cadet" || role == "Advance Cadet")
     {
 
-        choice = userMenu("Cadets Menu"); // Display the menu
-
-        switch (choice)
+        while (running)
         {
-        case 1: // Display the user's personal information
-            viewProfile(user, index);
-            break;
-        case 2:
-            cout << "Coming Soon";
-            break;
-        case 3: // Display the user's attendance and status
-            viewAttendance(user, index);
-            break;
-        case 4:
-            break;
-        default:
-            break;
+            choice = userMenu("Cadets Menu"); // Display the menu
+
+            switch (choice)
+            {
+            case 1: // Display the user's personal information
+                viewProfile(user, index);
+                break;
+            case 2: // View Announcements
+                cout << "Coming Soon";
+                break;
+            case 3: // Display the user's attendance and status
+                viewAttendance(user, index);
+                break;
+            case 4: // Log out
+                running = false;
+                break;
+            default:
+                break;
+            }
         }
     }
 }
 
 int main()
 {
-    int option = 0;    // Store the user's option
-    int role = 0;      // Store the user's role
-    int userIndex = 0; // Store the user's index in logging in
+    int option = 0;      // Store the user's option
+    int role = 0;        // Store the user's role
+    int userIndex = 0;   // Store the user's index in logging in
+    bool running = true; // Condition to keep the system running
 
     // Basic Cadets Main Variables
     int numCadets = 0;                      // total number of basic cadets registered
@@ -524,20 +530,19 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
-
     // Load all users from files
     lastCadet = loadUser(basicCadets, "basicCadet.txt");
     lastAdvanceCadet = loadUser(advanceCadets, "advanceCadet.txt");
     lastOfficer = loadUser(staffOfficers, "staffOfficer.txt");
     lastBrigade = loadUser(brigadeStaffs, "brigadeStaff.txt");
 
-    // Store the number of user in different role 
+    // Store the number of user in different role
     numCadets = lastCadet;
     numAdvanceCadets = lastAdvanceCadet;
     numOfficers = lastOfficer;
     numBrigades = lastBrigade;
 
-    while (true) // Debugging condition
+    while (running)
     {
         option = userMenu("Main"); // Main Menu
 
@@ -593,7 +598,8 @@ int main()
             }
 
             break;
-        case 3: // Exit
+        case 3:              // Exit
+            running = false; // Stop the system from looping
             cout << "\nThank you for using UnitSync!\n";
             break;
         }
