@@ -56,7 +56,15 @@ void displayUserMenu(string typeMenu)
         cout << "1. View My Profile\n";
         cout << "2. Announcements\n";
         cout << "3. View My Attendance\n";
-        cout << "4. Exit\n";
+        cout << "4. Log Out\n";
+    }
+    else if (typeMenu == "Staff Officer Menu")
+    {
+        cout << "Menu\n";
+        cout << "1. View My Profile\n";
+        cout << "2. Take Attendance\n";
+        cout << "3. Announcements\n";
+        cout << "4. Log Out\n";
     }
 }
 
@@ -466,7 +474,7 @@ void viewAttendance(User *user, int index)
     cout << endl;
 }
 
-// Function for every user's feature
+// Function for cadets feature
 void usersFeature(User *user, int index)
 {
     string role = (user + index)->role; // Store the user's role
@@ -499,6 +507,44 @@ void usersFeature(User *user, int index)
             default:
                 break;
             }
+        }
+    }
+}
+
+// Function for staff officer's feature
+void usersFeature(User *user, int index, User *cadet, int numCadet)
+{
+    string staff = (user + index)->staff; // Store the staff designation of the user
+    bool running = true;
+
+    int choice = 0;
+
+    while (running)
+    {
+        choice = userMenu("Staff Officer Menu"); // Display the menu
+
+        switch (choice)
+        {
+        case 1: // Display the user's personal information
+            viewProfile(user, index);
+            break;
+        case 2: // Take Attendance: Basic Cadets or Advance Cadets
+            if (staff == "S1")
+            {
+                // Basic Cadets
+            }
+            else if (staff == "S3")
+            {
+                // Advance Cadets
+            }
+            break;
+        case 3: // View Announcements
+            break;
+        case 4: // Log out
+            running = false;
+            break;
+        default:
+            break;
         }
     }
 }
