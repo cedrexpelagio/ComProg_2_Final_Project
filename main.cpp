@@ -11,10 +11,10 @@ const int MAX_USER = 100;
 const int NUM_TRAINING_DAY = 15;
 
 // Add at top with your other constants
-const string FILE_BASIC    = "basicCadet.txt";
-const string FILE_ADVANCE  = "advanceCadet.txt";
-const string FILE_OFFICER  = "staffOfficer.txt";
-const string FILE_BRIGADE  = "brigadeStaff.txt";
+const string FILE_BASIC = "basicCadet.txt";
+const string FILE_ADVANCE = "advanceCadet.txt";
+const string FILE_OFFICER = "staffOfficer.txt";
+const string FILE_BRIGADE = "brigadeStaff.txt";
 
 // Struct for User's data
 struct User
@@ -71,6 +71,15 @@ void displayUserMenu(string typeMenu)
         cout << "2. Take Attendance\n";
         cout << "3. Announcements\n";
         cout << "4. Log Out\n";
+    }
+    else if (typeMenu == "Brigade Staff Menu")
+    {
+        cout << "Menu\n";
+        cout << "1. View My Profile\n";
+        cout << "2. Create an Announcement\n";
+        cout << "3. List of User\n";
+        cout << "4. Smart Search\n";
+        cout << "5. Log Out\n";
     }
 }
 
@@ -370,7 +379,7 @@ void roleConverter(User *user, int role, int index)
         (user + index)->role = "Staff Officer";
         break;
     case 4:
-        (user + index)->role = "Brigade Officer";
+        (user + index)->role = "Brigade Staff";
         break;
     }
 }
@@ -493,6 +502,7 @@ void usersFeature(User *user, int index)
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
     User *staffOfficers = new User[MAX_USER];
+
     // Store the number of user based on type
     int numCadets = loadUser(basicCadets, FILE_BASIC);
     int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
@@ -556,11 +566,35 @@ void usersFeature(User *user, int index)
             }
         }
     }
+    else if (role == "Brigade Staff")
+    {
+        while (running)
+        {
+            choice = userMenu("Brigade Staff Menu"); // Display the menu
+
+            switch (choice)
+            {
+            case 1: // Display the user's personal information
+                viewProfile(user, index);
+                break;
+            case 2: // Create an Announcement
+                break;
+            case 3: // List of User
+                break;
+            case 4: // Smart Search
+                break;
+            case 5: // Log out
+                running = false;
+                break;
+            default:
+                break;
+            }
+        }
+    }
 
     delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
-
 }
 
 int main()
@@ -655,6 +689,7 @@ int main()
                 break;
             case 4: // Brigade Staff
                 userLogIn(brigadeStaffs, numBrigades, &userIndex);
+                usersFeature(brigadeStaffs, userIndex);
                 break;
             }
 
