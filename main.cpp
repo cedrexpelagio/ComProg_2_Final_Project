@@ -346,6 +346,47 @@ int loadUser(User *user, string fileName)
     return index; // returns number of users loaded
 }
 
+// For attendance update — rewrites entire file
+void updateFile(User *user, int numUser, string fileName)
+{
+    fstream file;
+    file.open(fileName, ios::out);
+
+    if (file.is_open())
+    {
+        for (int i = 0; i < numUser; i++)
+        {
+            file << (user + i)->userName   << ",";
+            file << (user + i)->lastName   << ",";
+            file << (user + i)->sureName   << ",";
+            file << (user + i)->middleName << ",";
+            file << (user + i)->studentID  << ",";
+            file << (user + i)->program    << ",";
+            file << (user + i)->company    << ",";
+            file << (user + i)->platoon    << ",";
+            file << (user + i)->role       << ",";
+            file << (user + i)->rank       << ",";
+            file << (user + i)->staff      << ",";
+            file << (user + i)->password   << ",";
+            file << (user + i)->numPresent << ",";
+            file << (user + i)->numAbsent  << ",";
+            file << (user + i)->numExcuse  << ",";
+
+            for (int j = 0; j < NUM_TRAINING_DAY; j++)
+            {
+                if ((user + i)->status[j].empty())
+                    file << "--";
+                else
+                    file << (user + i)->status[j];
+                if (j < NUM_TRAINING_DAY - 1)
+                    file << ",";
+            }
+            file << "\n";
+        }
+        file.close();
+    }
+}
+
 // Function to register a user
 void registerUser(User *user, int *index, int *numberOfUser, string fileName)
 {
@@ -568,9 +609,9 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     cin >> trainingDay;
 
     if (role == "Basic Cadet"){
-        fileName = FILE_BASIC;
+        fileName = FILE_BASIC; // Basic Cadet File
     } else {
-        fileName = FILE_ADVANCE;
+        fileName = FILE_ADVANCE; // Advance Cadet File
     }
 
     for (int i = 0; i < numUser; i++){
@@ -581,6 +622,8 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
          (user + i)->status[trainingDay - 1] = statusConverter(status);
         }
     }
+
+    updateFile(user, numUser, fileName);
 }
 
 // Function for staff officers to take attendance
