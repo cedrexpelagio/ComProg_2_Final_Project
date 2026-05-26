@@ -81,6 +81,29 @@ void displayUserMenu(string typeMenu)
         cout << "4. Smart Search\n";
         cout << "5. Log Out\n";
     }
+    else if (typeMenu == "Company Menu")
+    {
+        cout << "Company\n";
+        cout << "1. Alpha\n";
+        cout << "2. Bravo\n";
+        cout << "3. Charlie\n";
+        cout << "4. Delta\n";
+    }
+    else if (typeMenu == "Platoon Menu")
+    {
+        cout << "Platoon\n";
+        cout << "1. 1st Platoon\n";
+        cout << "2. 2nd Platoon\n";
+        cout << "3. 3rd Platoon\n";
+        cout << "4. 4th Platoon\n";
+    }
+    else if (typeMenu == "Status Menu"){
+        cout << "Status\n";
+        cout << "1. Present\n";
+        cout << "2. Late\n";
+        cout << "3. Excuse\n";
+        cout << "4. Absent\n";
+    }
 }
 
 // Function that returns the user choice in the main menu
@@ -344,7 +367,7 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
         registerRank(user, *index);
     }
     // Registration of Staff Officers and Brigade Staff
-    else if (role == "Staff Officer" || role == "Brigade Officer")
+    else if (role == "Staff Officer" || role == "Brigade Staff")
     {
         registerRank(user, *index);
         registerStaff(user, *index);
@@ -482,11 +505,99 @@ void viewAttendance(User *user, int index)
     cout << "|";
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
     {
-        (user + index)->status[i] = "--";
         cout << (user + index)->status[i] << "|";
     }
 
     cout << endl;
+}
+
+// Function that convert company option to string
+string companyConverter(int company)
+{
+    switch (company)
+    {
+    case 1:
+        return "Alpha";
+    case 2:
+        return "Bravo";
+    case 3:
+        return "Charlie";
+    case 4:
+        return "Delta";
+    }
+}
+
+// Function that convert platoon option to string
+string platoonConverter(int platoon)
+{
+    switch (platoon)
+    {
+    case 1:
+        return "1st Platoon";
+    case 2:
+        return "2nd Platoon";
+    case 3:
+        return "3rd Platoon";
+    case 4:
+        return "4th Platoon";
+    }
+}
+
+string statusConverter(int status){
+    switch (status)
+    {
+    case 1:
+        return "Present";
+    case 2:
+        return "Late";
+    case 3:
+        return "Excuse";
+    case 4:
+        return "Absent";
+    }
+}
+
+void takeAttendance(User *user, int numUser, string company, string platoon)
+{
+    int trainingDay = 0;
+    int status = 0;
+    string fileName = "";
+    string role = (user + 0)->role;
+
+    cout << "Enter Training Day: ";
+    cin >> trainingDay;
+
+    if (role == "Basic Cadet"){
+        fileName = FILE_BASIC;
+    } else {
+        fileName = FILE_ADVANCE;
+    }
+
+    for (int i = 0; i < numUser; i++){
+
+        if((user + i)->company == company && (user + i)->platoon == platoon){
+         cout << (user + i)->userName << endl;
+         status = userMenu("Status Menu");
+         (user + i)->status[trainingDay - 1] = statusConverter(status);
+        }
+    }
+}
+
+// Function for staff officers to take attendance
+void takeAttendance(User *user, int numUser)
+{
+    int choice = 0;
+
+    string company = "",
+           platoon = "";
+
+    choice = userMenu("Company Menu");
+    company = companyConverter(choice);
+
+    choice = userMenu("Platoon Menu");
+    platoon = platoonConverter(choice);
+
+    takeAttendance(user, numUser, company, platoon);
 }
 
 // Function for all user feature
@@ -549,7 +660,7 @@ void usersFeature(User *user, int index)
             case 2: // Take Attendance: Basic Cadets or Advance Cadets
                 if (staff == "S1")
                 {
-                    // Basic Cadets
+                    takeAttendance(basicCadets, numCadets);
                 }
                 else if (staff == "S3")
                 {
