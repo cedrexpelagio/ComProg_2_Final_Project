@@ -1,4 +1,4 @@
-JUANCARLO.BAUTISTA,JUAN CARLO,BAUTISTA,YO,LQ-00098-2025,BSIT-1-1,Bravo,1st Platoon,Basic Cadet,,,JUANCARLO-00098-0,0,0,0,Present,Excuse,Excuse,Present,--,--,--,--,--,--,--,--,--,--,--
+JUANCARLO.BAUTISTA,JUAN CARLO,BAUTISTA,YO,LQ-00098-2025,BSIT-1-1,Bravo,1st Platoon,Basic Cadet,,,JUANCARLO-00098-0,0,0,0,Present,Excuse,Present,Excuse,--,--,--,--,--,--,--,--,--,--,--
 MARIAANGELA.SANTOS,MARIA ANGELA,SANTOS,CRUZ,LQ-00124-2025,BSCS-1-2,Alpha,2nd Platoon,Basic Cadet,,,MARIAANGELA-00124-1,0,0,0,--,--,--,--,--,--,--,--,--,--,--,--,--,--,--
 CARLJOSE.REYES,CARL JOSE,REYES,RAMOS,LQ-00357-2025,BSIS-1-1,Charlie,3rd Platoon,Basic Cadet,,,CARLJOSE-00357-2,0,0,0,--,--,--,--,--,--,--,--,--,--,--,--,--,--,--
-ANNELOUISE.DELA CRUZ,ANNE LOUISE,DELA CRUZ,GARCIA,LQ-00581-2025,BSCE-1-1,Delta,4th Platoon,Basic Cadet,,,ANNELOUISE-00581-3,0,0,0,--,--,--,--,--,--,--,--,--,--,--,--,--,--,--
+ANNELOUISE.DELA CRUZ,ANNE LOUISE,DELA CRUZ,GARCIA,LQ-00581-2025,BSCE-1-1,Delta,4th Platoon,Basic Cadet,,,ANNELOUISE-00581-3,0,0,0,Absent,--,--,--,--,--,--,--,--,--,--,--,--,--,--

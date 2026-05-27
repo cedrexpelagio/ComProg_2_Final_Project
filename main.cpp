@@ -527,20 +527,43 @@ void userLogIn(User *user, int numUser, int *index)
     } while (!verification); // Loop if the password is incorrect
 }
 
-// Function to display the user's personal information
-// Still WIP, the UI will be improved in later phase
 void viewProfile(User *user, int index)
 {
-    cout << "User Name  : " << (user + index)->userName << "\n";
-    cout << "Last Name  : " << (user + index)->lastName << "\n";
-    cout << "Sure Name  : " << (user + index)->sureName << "\n";
-    cout << "Middle Name: " << (user + index)->middleName << "\n";
-    cout << "Student ID : " << (user + index)->studentID << "\n";
-    cout << "Program    : " << (user + index)->program << "\n";
-    cout << "Company    : " << (user + index)->company << "\n";
-    cout << "Platoon    : " << (user + index)->platoon << "\n";
-    cout << "Role       : " << (user + index)->role << "\n";
-    cout << "Rank       : " << (user + index)->rank << "\n";
+    string role = (user + index)->role;
+    string line1 = string(70, '=');
+    string line2 = string(70, '-');
+
+    cout << "\n";
+    cout << line1 << "\n";
+    cout << right << setw(41) << "USER PROFILE" << "\n";
+    cout << line1 << "\n";
+    cout << left << setw(15) << "User Name" << ": " << (user + index)->userName << "\n";
+    cout << line2 << "\n";
+    cout << left << setw(15) << "Last Name"   << ": " << setw(25) << (user + index)->lastName
+         << left << setw(10) << "Sure Name"   << ": " << (user + index)->sureName   << "\n";
+    cout << left << setw(15) << "Middle Name" << ": " << setw(25) << (user + index)->middleName
+         << left << setw(10) << "Student ID"  << ": " << (user + index)->studentID  << "\n";
+    cout << left << setw(15) << "Program"     << ": " << setw(25) << (user + index)->program
+         << left << setw(10) << "Role"        << ": " << (user + index)->role       << "\n";
+    cout << line2 << "\n";
+
+    if (role == "Basic Cadet")
+    {
+        cout << left << setw(15) << "Company" << ": " << setw(25) << (user + index)->company
+             << left << setw(10) << "Platoon" << ": " << (user + index)->platoon << "\n";
+    }
+    else if (role == "Advance Cadet")
+    {
+        cout << left << setw(15) << "Platoon" << ": " << setw(25) << (user + index)->platoon
+             << left << setw(10) << "Rank"    << ": " << (user + index)->rank    << "\n";
+    }
+    else if (role == "Staff Officer" || role == "Brigade Staff")
+    {
+        cout << left << setw(15) << "Rank"  << ": " << setw(25) << (user + index)->rank
+             << left << setw(10) << "Staff" << ": " << (user + index)->staff << "\n";
+    }
+
+    cout << line1 << "\n";
 }
 
 // Function the display the user's attendance and status
