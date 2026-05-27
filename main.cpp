@@ -97,7 +97,8 @@ void displayUserMenu(string typeMenu)
         cout << "3. 3rd Platoon\n";
         cout << "4. 4th Platoon\n";
     }
-    else if (typeMenu == "Status Menu"){
+    else if (typeMenu == "Status Menu")
+    {
         cout << "Status\n";
         cout << "1. Present\n";
         cout << "2. Late\n";
@@ -356,21 +357,21 @@ void updateFile(User *user, int numUser, string fileName)
     {
         for (int i = 0; i < numUser; i++)
         {
-            file << (user + i)->userName   << ",";
-            file << (user + i)->lastName   << ",";
-            file << (user + i)->sureName   << ",";
+            file << (user + i)->userName << ",";
+            file << (user + i)->lastName << ",";
+            file << (user + i)->sureName << ",";
             file << (user + i)->middleName << ",";
-            file << (user + i)->studentID  << ",";
-            file << (user + i)->program    << ",";
-            file << (user + i)->company    << ",";
-            file << (user + i)->platoon    << ",";
-            file << (user + i)->role       << ",";
-            file << (user + i)->rank       << ",";
-            file << (user + i)->staff      << ",";
-            file << (user + i)->password   << ",";
+            file << (user + i)->studentID << ",";
+            file << (user + i)->program << ",";
+            file << (user + i)->company << ",";
+            file << (user + i)->platoon << ",";
+            file << (user + i)->role << ",";
+            file << (user + i)->rank << ",";
+            file << (user + i)->staff << ",";
+            file << (user + i)->password << ",";
             file << (user + i)->numPresent << ",";
-            file << (user + i)->numAbsent  << ",";
-            file << (user + i)->numExcuse  << ",";
+            file << (user + i)->numAbsent << ",";
+            file << (user + i)->numExcuse << ",";
 
             for (int j = 0; j < NUM_TRAINING_DAY; j++)
             {
@@ -584,7 +585,8 @@ string platoonConverter(int platoon)
     }
 }
 
-string statusConverter(int status){
+string statusConverter(int status)
+{
     switch (status)
     {
     case 1:
@@ -608,18 +610,23 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     cout << "Enter Training Day: ";
     cin >> trainingDay;
 
-    if (role == "Basic Cadet"){
+    if (role == "Basic Cadet")
+    {
         fileName = FILE_BASIC; // Basic Cadet File
-    } else {
+    }
+    else
+    {
         fileName = FILE_ADVANCE; // Advance Cadet File
     }
 
-    for (int i = 0; i < numUser; i++){
+    for (int i = 0; i < numUser; i++)
+    {
 
-        if((user + i)->company == company && (user + i)->platoon == platoon){
-         cout << (user + i)->userName << endl;
-         status = userMenu("Status Menu");
-         (user + i)->status[trainingDay - 1] = statusConverter(status);
+        if ((user + i)->company == company && (user + i)->platoon == platoon)
+        {
+            cout << (user + i)->userName << endl;
+            status = userMenu("Status Menu");
+            (user + i)->status[trainingDay - 1] = statusConverter(status);
         }
     }
 
@@ -778,20 +785,20 @@ int main()
     int lastBrigade = 0;                      // track the last index of brigade staff
     User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
 
-    // Load all users from files
-    lastCadet = loadUser(basicCadets, FILE_BASIC);
-    lastAdvanceCadet = loadUser(advanceCadets, FILE_ADVANCE);
-    lastOfficer = loadUser(staffOfficers, FILE_OFFICER);
-    lastBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
-
-    // Store the number of user in different role
-    numCadets = lastCadet;
-    numAdvanceCadets = lastAdvanceCadet;
-    numOfficers = lastOfficer;
-    numBrigades = lastBrigade;
-
     while (running)
     {
+        // Load all users from files
+        lastCadet = loadUser(basicCadets, FILE_BASIC);
+        lastAdvanceCadet = loadUser(advanceCadets, FILE_ADVANCE);
+        lastOfficer = loadUser(staffOfficers, FILE_OFFICER);
+        lastBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
+
+        // Store the number of user in different role
+        numCadets = lastCadet;
+        numAdvanceCadets = lastAdvanceCadet;
+        numOfficers = lastOfficer;
+        numBrigades = lastBrigade;
+
         option = userMenu("Main"); // Main Menu
 
         switch (option)
