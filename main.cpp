@@ -118,45 +118,84 @@ int userMenu(string typeMenu)
     return choice; // return the choice
 }
 
+// Function that converter user role based on role option
+void roleConverter(User *user, int role, int index)
+{
+    switch (role)
+    {
+    case 1:
+        (user + index)->role = "Basic Cadet";
+        break;
+    case 2:
+        (user + index)->role = "Advance Cadet";
+        break;
+    case 3:
+        (user + index)->role = "Staff Officer";
+        break;
+    case 4:
+        (user + index)->role = "Brigade Staff";
+        break;
+    }
+}
+
+// Function that convert company option to string
+string companyConverter(int company)
+{
+    switch (company)
+    {
+    case 1:
+        return "Alpha";
+    case 2:
+        return "Bravo";
+    case 3:
+        return "Charlie";
+    case 4:
+        return "Delta";
+    }
+}
+
+// Function that convert platoon option to string
+string platoonConverter(int platoon)
+{
+    switch (platoon)
+    {
+    case 1:
+        return "1st Platoon";
+    case 2:
+        return "2nd Platoon";
+    case 3:
+        return "3rd Platoon";
+    case 4:
+        return "4th Platoon";
+    }
+}
+
+string statusConverter(int status)
+{
+    switch (status)
+    {
+    case 1:
+        return "Present";
+    case 2:
+        return "Late";
+    case 3:
+        return "Excuse";
+    case 4:
+        return "Absent";
+    }
+}
+
 // Function to select company or platoon
 void selectUnit(User *basicCadets, int index, string type)
 {
     int choice = 0; // Store the users choice
-    int row = 0;    // Store the row based on the type
 
-    // Stores the company and platoon type
-    string unit[2][4] = {
-        {"Alpha", "Bravo", "Charlie", "Delta"},                        // row 0
-        {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"}}; // row 1
+    choice = userMenu("Company Menu");
+    (basicCadets + index)->company = companyConverter(choice);
 
-    // Identify the value of row based on the type
-    if (type == "Company")
-    {
-        row = 0;
-    }
-    else if (type == "Platoon")
-    {
-        row = 1;
-    }
+    choice = userMenu("Platoon Menu");
+    (basicCadets + index)->platoon = platoonConverter(choice);
 
-    // Display the menu
-    cout << type << ":" << endl;
-    for (int i = 0; i < 4; i++)
-    {
-        cout << i + 1 << ". " << unit[row][i] << endl;
-    }
-    cout << "Enter Choice: ";
-    cin >> choice;
-
-    // Assign the value to the comapany or platoon variable
-    if (type == "Company")
-    {
-        (basicCadets + index)->company = unit[row][choice - 1];
-    }
-    else if (type == "Platoon")
-    {
-        (basicCadets + index)->platoon = unit[row][choice - 1];
-    }
 }
 
 // Function to register user student information
@@ -429,26 +468,6 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     (*numberOfUser)++;
 }
 
-// Function that converter user role based on role option
-void roleConverter(User *user, int role, int index)
-{
-    switch (role)
-    {
-    case 1:
-        (user + index)->role = "Basic Cadet";
-        break;
-    case 2:
-        (user + index)->role = "Advance Cadet";
-        break;
-    case 3:
-        (user + index)->role = "Staff Officer";
-        break;
-    case 4:
-        (user + index)->role = "Brigade Staff";
-        break;
-    }
-}
-
 // Function that verify the user name
 bool verifyUserName(User *user, string userName, int numUser, int *index)
 {
@@ -551,53 +570,6 @@ void viewAttendance(User *user, int index)
     }
 
     cout << endl;
-}
-
-// Function that convert company option to string
-string companyConverter(int company)
-{
-    switch (company)
-    {
-    case 1:
-        return "Alpha";
-    case 2:
-        return "Bravo";
-    case 3:
-        return "Charlie";
-    case 4:
-        return "Delta";
-    }
-}
-
-// Function that convert platoon option to string
-string platoonConverter(int platoon)
-{
-    switch (platoon)
-    {
-    case 1:
-        return "1st Platoon";
-    case 2:
-        return "2nd Platoon";
-    case 3:
-        return "3rd Platoon";
-    case 4:
-        return "4th Platoon";
-    }
-}
-
-string statusConverter(int status)
-{
-    switch (status)
-    {
-    case 1:
-        return "Present";
-    case 2:
-        return "Late";
-    case 3:
-        return "Excuse";
-    case 4:
-        return "Absent";
-    }
 }
 
 void takeAttendance(User *user, int numUser, string company, string platoon)
