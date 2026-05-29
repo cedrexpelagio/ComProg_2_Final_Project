@@ -195,7 +195,6 @@ void selectUnit(User *basicCadets, int index, string type)
 
     choice = userMenu("Platoon Menu");
     (basicCadets + index)->platoon = platoonConverter(choice);
-
 }
 
 // Function to register user student information
@@ -527,26 +526,28 @@ void userLogIn(User *user, int numUser, int *index)
     } while (!verification); // Loop if the password is incorrect
 }
 
+// Function for the user's to view their profile
 void viewProfile(User *user, int index)
 {
     string role = (user + index)->role;
     string line1 = string(70, '=');
     string line2 = string(70, '-');
 
+    // Display the user's profile using setw
     cout << "\n";
     cout << line1 << "\n";
     cout << right << setw(41) << "USER PROFILE" << "\n";
     cout << line1 << "\n";
     cout << left << setw(15) << "User Name" << ": " << (user + index)->userName << "\n";
     cout << line2 << "\n";
-    cout << left << setw(15) << "Last Name"   << ": " << setw(25) << (user + index)->lastName
-         << left << setw(10) << "Sure Name"   << ": " << (user + index)->sureName   << "\n";
+    cout << left << setw(15) << "Last Name" << ": " << setw(25) << (user + index)->lastName
+         << left << setw(10) << "Sure Name" << ": " << (user + index)->sureName << "\n";
     cout << left << setw(15) << "Middle Name" << ": " << setw(25) << (user + index)->middleName
-         << left << setw(10) << "Student ID"  << ": " << (user + index)->studentID  << "\n";
-    cout << left << setw(15) << "Program"     << ": " << setw(25) << (user + index)->program
-         << left << setw(10) << "Role"        << ": " << (user + index)->role       << "\n";
-    cout << line2 << "\n";
+         << left << setw(10) << "Student ID" << ": " << (user + index)->studentID << "\n";
+    cout << left << setw(15) << "Program" << ": " << setw(25) << (user + index)->program
+         << left << setw(10) << "Role" << ": " << (user + index)->role << "\n";
 
+    // Additional information based on the user's role
     if (role == "Basic Cadet")
     {
         cout << left << setw(15) << "Company" << ": " << setw(25) << (user + index)->company
@@ -555,11 +556,11 @@ void viewProfile(User *user, int index)
     else if (role == "Advance Cadet")
     {
         cout << left << setw(15) << "Platoon" << ": " << setw(25) << (user + index)->platoon
-             << left << setw(10) << "Rank"    << ": " << (user + index)->rank    << "\n";
+             << left << setw(10) << "Rank" << ": " << (user + index)->rank << "\n";
     }
     else if (role == "Staff Officer" || role == "Brigade Staff")
     {
-        cout << left << setw(15) << "Rank"  << ": " << setw(25) << (user + index)->rank
+        cout << left << setw(15) << "Rank" << ": " << setw(25) << (user + index)->rank
              << left << setw(10) << "Staff" << ": " << (user + index)->staff << "\n";
     }
 
@@ -595,6 +596,7 @@ void viewAttendance(User *user, int index)
     cout << endl;
 }
 
+// WIP: Staff officer can take cadet's attendance
 void takeAttendance(User *user, int numUser, string company, string platoon)
 {
     int trainingDay = 0;
@@ -619,7 +621,12 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
 
         if ((user + i)->company == company && (user + i)->platoon == platoon)
         {
-            cout << (user + i)->userName << endl;
+            // Display the users basic information
+            cout << left << setw(15) << "Last Name" << ": " << setw(25) << (user + i)->lastName
+                 << left << setw(10) << "Sure Name" << ": " << (user + i)->sureName << "\n";
+            cout << left << setw(15) << "Middle Name" << ": " << setw(25) << (user + i)->middleName
+                 << left << setw(10) << "Program" << ": " << (user + i)->program << "\n";
+
             status = userMenu("Status Menu");
             (user + i)->status[trainingDay - 1] = statusConverter(status);
         }
@@ -628,7 +635,7 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     updateFile(user, numUser, fileName);
 }
 
-// Function for staff officers to take attendance
+// Function overloading to select the company and platoon of cadets
 void takeAttendance(User *user, int numUser)
 {
     int choice = 0;
