@@ -577,7 +577,7 @@ void printColoredStatus(string status, string text)
     }
     else if (status == "Late")
     {
-        cout << "\033[35m" << text << "\033[0m"; // Magenta/Pink
+        cout << "\033[34m" << text << "\033[0m"; // Blue
     }
     else if (status == "Excuse")
     {
@@ -628,14 +628,12 @@ void viewAttendance(User *user, int index)
     cout << string(22, ' ') << "USER ATTENDANCE" << "\n";
     cout << boldLine << "\n";
 
-    cout << endl;
-
     // Color representation legend
     cout << "Legend:\n";
-    printColoredStatus("Present", "-- Present  ");
-    printColoredStatus("Late", "-- Late  ");
-    printColoredStatus("Excuse", "-- Excuse  ");
-    printColoredStatus("Absent", "-- Absent  ");
+    printColoredStatus("Present", "== Present  ");
+    printColoredStatus("Late", "== Late  ");
+    printColoredStatus("Excuse", "== Excuse  ");
+    printColoredStatus("Absent", "== Absent  ");
     cout << "\033[0m-- Not Yet Taken\n";
     cout << line << "\n";
 
@@ -657,14 +655,15 @@ void viewAttendance(User *user, int index)
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
     {
         // Display for empty status
-        if ((user + index)->status[i].empty()){
+        if ((user + index)->status[i].empty())
+        {
             cout << "--";
         }
         // Display colored text based on the user status
         else
         {
-            printColoredStatus((user + index)->status[i], "--"); // Display
-            statusCounter(user, index, i); // Count the status
+            printColoredStatus((user + index)->status[i], "=="); // Display
+            statusCounter(user, index, i);                       // Count the status
         }
         cout << "|";
     }
