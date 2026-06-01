@@ -632,15 +632,17 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
 }
 
 // Function overloading to select the company and platoon of cadets
-void takeAttendance(User *user, int numUser)
+void takeAttendance(User *user, int numUser, string staff)
 {
     int choice = 0;
 
     string company = "",
            platoon = "";
 
+    if (staff == "S1"){
     choice = userMenu("Company Menu");
     company = companyConverter(choice);
+    }
 
     choice = userMenu("Platoon Menu");
     platoon = platoonConverter(choice);
@@ -708,11 +710,11 @@ void usersFeature(User *user, int index)
             case 2: // Take Attendance: Basic Cadets or Advance Cadets
                 if (staff == "S1")
                 {
-                    takeAttendance(basicCadets, numCadets);
+                    takeAttendance(basicCadets, numCadets, staff);
                 }
                 else if (staff == "S3")
                 {
-                    // Advance Cadets
+                      takeAttendance(advanceCadets, numAdvanceCadets, staff);
                 }
                 break;
             case 3: // View Announcements
