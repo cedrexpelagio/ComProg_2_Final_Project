@@ -100,10 +100,10 @@ void displayUserMenu(string typeMenu)
     else if (typeMenu == "Status Menu")
     {
         cout << "Status\n";
-        cout << "1. Present\n";
-        cout << "2. Late\n";
-        cout << "3. Excuse\n";
-        cout << "4. Absent\n";
+        cout << "[1] Present    ";
+        cout << "[2] Late     ";
+        cout << "[3] Excuse     ";
+        cout << "[4] Absent     \n";
     }
 }
 
@@ -186,7 +186,7 @@ string statusConverter(int status)
 }
 
 // Function to select company or platoon
-void selectUnit(User *basicCadets, int index, string type)
+void selectUnit(User *basicCadets, int index)
 {
     int choice = 0; // Store the users choice
 
@@ -277,39 +277,40 @@ string generatePassword(User *user, int index)
 }
 
 // Function to write data in files, serve as the helper function for save user and update file function
-void writeFile(fstream &file, User *user, int index){
+void writeFile(fstream &file, User *user, int index)
+{
 
-        file << (user + index)->userName << ",";
-        file << (user + index)->lastName << ",";
-        file << (user + index)->sureName << ",";
-        file << (user + index)->middleName << ",";
-        file << (user + index)->studentID << ",";
-        file << (user + index)->program << ",";
-        file << (user + index)->company << ",";
-        file << (user + index)->platoon << ",";
-        file << (user + index)->role << ",";
-        file << (user + index)->rank << ",";
-        file << (user + index)->staff << ",";
-        file << (user + index)->password << ",";
-        file << (user + index)->numPresent << ",";
-        file << (user + index)->numAbsent << ",";
-        file << (user + index)->numExcuse << ",";
+    file << (user + index)->userName << ",";
+    file << (user + index)->lastName << ",";
+    file << (user + index)->sureName << ",";
+    file << (user + index)->middleName << ",";
+    file << (user + index)->studentID << ",";
+    file << (user + index)->program << ",";
+    file << (user + index)->company << ",";
+    file << (user + index)->platoon << ",";
+    file << (user + index)->role << ",";
+    file << (user + index)->rank << ",";
+    file << (user + index)->staff << ",";
+    file << (user + index)->password << ",";
+    file << (user + index)->numPresent << ",";
+    file << (user + index)->numAbsent << ",";
+    file << (user + index)->numExcuse << ",";
 
-        // Save status array
-        for (int i = 0; i < NUM_TRAINING_DAY; i++)
+    // Save status array
+    for (int i = 0; i < NUM_TRAINING_DAY; i++)
+    {
+        if ((user + index)->status[i].empty())
+            file << "--";
+        else
+            file << (user + index)->status[i];
+
+        if (i < NUM_TRAINING_DAY - 1)
         {
-            if ((user + index)->status[i].empty())
-                file << "--";
-            else
-                file << (user + index)->status[i];
-
-            if (i < NUM_TRAINING_DAY - 1)
-            {
-                file << ",";
-            }
+            file << ",";
         }
+    }
 
-        file << "\n";
+    file << "\n";
 }
 
 // Function for saving the user in a file based on their role
@@ -318,12 +319,12 @@ void saveUser(User *user, int index, string fileName)
 
     fstream file;
 
-file.open(fileName, ios::app);
-    
+    file.open(fileName, ios::app);
+
     // Save structure members
     if (file.is_open())
     {
-       writeFile(file, user, index);
+        writeFile(file, user, index);
         file.close();
     }
 }
@@ -420,8 +421,7 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     if (role == "Basic Cadet")
     {
         // Function for selecting the unit
-        selectUnit(user, *index, "Company"); // For Company
-        selectUnit(user, *index, "Platoon"); // For Platoon
+        selectUnit(user, *index); 
     }
     // Registration of Advance Cadets
     else if (role == "Advance Cadet")
@@ -583,6 +583,7 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
 {
     int trainingDay = 0;
     int status = 0;
+    int counter = 0;
     string fileName = "";
     string role = (user + 0)->role;
 
@@ -598,18 +599,24 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
         fileName = FILE_ADVANCE; // Advance Cadet File
     }
 
+    displayUserMenu("Status Menu");
+    cout << endl;
+
+    // Cadets information header
+    cout << setw(5) << left << "No." << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
+         << setw(16) << left << "Middle Name" << setw(12) << left << "Program" << setw(5) << left << "Status" << endl;
+
     for (int i = 0; i < numUser; i++)
     {
 
         if ((user + i)->company == company && (user + i)->platoon == platoon)
         {
             // Display the users basic information
-            cout << left << setw(15) << "Last Name" << ": " << setw(25) << (user + i)->lastName
-                 << left << setw(10) << "Sure Name" << ": " << (user + i)->sureName << "\n";
-            cout << left << setw(15) << "Middle Name" << ": " << setw(25) << (user + i)->middleName
-                 << left << setw(10) << "Program" << ": " << (user + i)->program << "\n";
+            counter++;
+            cout << setw(5) << left << to_string(counter) << setw(14) << left << (user + i)->lastName << setw(15) << left << (user + i)->sureName
+                 << setw(16) << left << (user + i)->middleName << setw(12) << left << (user + i)->program << setw(5) << left;
+            cin >> status;
 
-            status = userMenu("Status Menu");
             (user + i)->status[trainingDay - 1] = statusConverter(status);
         }
     }
