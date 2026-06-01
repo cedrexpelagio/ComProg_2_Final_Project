@@ -414,6 +414,7 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
 {
     // Store the role
     string role = (user + *index)->role;
+    int platoon = 0;
 
     registerUser(user, *index); // register student information
 
@@ -421,11 +422,17 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     if (role == "Basic Cadet")
     {
         // Function for selecting the unit
+        // Select Company and Platoon
         selectUnit(user, *index); 
     }
     // Registration of Advance Cadets
     else if (role == "Advance Cadet")
     {
+        // Select Platoon
+        platoon = userMenu("Platoon Menu");   
+        (user + *index)->platoon = platoonConverter(platoon);
+
+        cin.ignore();
         registerRank(user, *index);
     }
     // Registration of Staff Officers and Brigade Staff
