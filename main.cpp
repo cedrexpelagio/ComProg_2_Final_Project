@@ -37,6 +37,16 @@ struct User
     int numExcuse = 0;
 };
 
+struct Announcement {
+string what = "";
+string who = "";
+string where = "";
+string when = "";
+string attire = "";
+string toBring = "";
+string note = "";
+};
+
 // Function that display the user menu
 void displayUserMenu(string typeMenu)
 {
@@ -202,11 +212,11 @@ void selectUnit(User *basicCadets, int index)
 void registerUser(User *user, int index)
 {
     cin.ignore();
-    cout << "Last Name(ex. DELA CRUZ)   : ";
+    cout << "Last Name(ex. DELA CRUZ)     : ";
     getline(cin, (user + index)->lastName);
-    cout << "Sure Name(ex. JUAN)   : ";
+    cout << "Sure Name(ex. JUAN)          : ";
     getline(cin, (user + index)->sureName);
-    cout << "Middle Name(ex. REYES)   : ";
+    cout << "Middle Name(ex. REYES)       : ";
     getline(cin, (user + index)->middleName);
     cout << "Student ID(ex. LQ-00093-2025): ";
     getline(cin, (user + index)->studentID);
