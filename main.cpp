@@ -276,16 +276,9 @@ string generatePassword(User *user, int index)
     return password;
 }
 
-// Function for saving the user in a file based on their role
-void saveUser(User *user, int index, string fileName)
-{
-    fstream file;
+// Function to write data in files, serve as the helper function for save user and update file function
+void writeFile(fstream &file, User *user, int index){
 
-    file.open(fileName, ios::app);
-
-    // Save structure members
-    if (file.is_open())
-    {
         file << (user + index)->userName << ",";
         file << (user + index)->lastName << ",";
         file << (user + index)->sureName << ",";
@@ -317,6 +310,20 @@ void saveUser(User *user, int index, string fileName)
         }
 
         file << "\n";
+}
+
+// Function for saving the user in a file based on their role
+void saveUser(User *user, int index, string fileName)
+{
+
+    fstream file;
+
+file.open(fileName, ios::app);
+    
+    // Save structure members
+    if (file.is_open())
+    {
+       writeFile(file, user, index);
         file.close();
     }
 }
@@ -395,32 +402,7 @@ void updateFile(User *user, int numUser, string fileName)
     {
         for (int i = 0; i < numUser; i++)
         {
-            file << (user + i)->userName << ",";
-            file << (user + i)->lastName << ",";
-            file << (user + i)->sureName << ",";
-            file << (user + i)->middleName << ",";
-            file << (user + i)->studentID << ",";
-            file << (user + i)->program << ",";
-            file << (user + i)->company << ",";
-            file << (user + i)->platoon << ",";
-            file << (user + i)->role << ",";
-            file << (user + i)->rank << ",";
-            file << (user + i)->staff << ",";
-            file << (user + i)->password << ",";
-            file << (user + i)->numPresent << ",";
-            file << (user + i)->numAbsent << ",";
-            file << (user + i)->numExcuse << ",";
-
-            for (int j = 0; j < NUM_TRAINING_DAY; j++)
-            {
-                if ((user + i)->status[j].empty())
-                    file << "--";
-                else
-                    file << (user + i)->status[j];
-                if (j < NUM_TRAINING_DAY - 1)
-                    file << ",";
-            }
-            file << "\n";
+            writeFile(file, user, i);
         }
         file.close();
     }
