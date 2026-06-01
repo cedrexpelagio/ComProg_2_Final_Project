@@ -33,18 +33,20 @@ struct User
     string staff = "";    // For staff officers and brigade staff
     string password = ""; // User Password
     int numPresent = 0;
+    int numLate = 0;
     int numAbsent = 0;
     int numExcuse = 0;
 };
 
-struct Announcement {
-string what = "";
-string who = "";
-string where = "";
-string when = "";
-string attire = "";
-string toBring = "";
-string note = "";
+struct Announcement
+{
+    string what = "";
+    string who = "";
+    string where = "";
+    string when = "";
+    string attire = "";
+    string toBring = "";
+    string note = "";
 };
 
 // Function that display the user menu
@@ -433,13 +435,13 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     {
         // Function for selecting the unit
         // Select Company and Platoon
-        selectUnit(user, *index); 
+        selectUnit(user, *index);
     }
     // Registration of Advance Cadets
     else if (role == "Advance Cadet")
     {
         // Select Platoon
-        platoon = userMenu("Platoon Menu");   
+        platoon = userMenu("Platoon Menu");
         (user + *index)->platoon = platoonConverter(platoon);
 
         cin.ignore();
@@ -566,11 +568,77 @@ void viewProfile(User *user, int index)
     cout << line1 << "\n";
 }
 
+void printColoredStatus(string status, string text)
+{
+
+    if (status == "Present")
+    {
+        cout << "\033[32m" << text << "\033[0m"; // Green
+    }
+    else if (status == "Late")
+    {
+        cout << "\033[35m" << text << "\033[0m"; // Magenta/Pink
+    }
+    else if (status == "Excuse")
+    {
+        cout << "\033[33m" << text << "\033[0m"; // Yellow
+    }
+    else if (status == "Absent")
+    {
+        cout << "\033[31m" << text << "\033[0m"; // Red
+    }
+}
+
+void statusCounter(User *user, int index, int statusIndex)
+{
+    string status = (user + index)->status[statusIndex];
+
+    if (status == "Present")
+    {
+        ((user + index)->numPresent)++;
+    }
+    else if (status == "Late")
+    {
+        ((user + index)->numLate)++;
+    }
+    else if (status == "Excuse")
+    {
+        ((user + index)->numExcuse)++;
+    }
+    else if (status == "Absent")
+    {
+        ((user + index)->numAbsent)++;
+    }
+}
+
 // Function the display the user's attendance and status
-// Still WIP, the UI will be improved in later phase
 void viewAttendance(User *user, int index)
 {
+    string line = string(60, '-');
+    string boldLine = string(60, '=');
+
+    // Reset counts before recalculating
+    (user + index)->numPresent = 0;
+    (user + index)->numLate = 0;
+    (user + index)->numExcuse = 0;
+    (user + index)->numAbsent = 0;
+
+    // Display feature title
+    cout << boldLine << "\n";
+    cout << string(22, ' ') << "USER ATTENDANCE" << "\n";
+    cout << boldLine << "\n";
+
     cout << endl;
+
+    // Color representation legend
+    cout << "Legend:\n";
+    printColoredStatus("Present", "-- Present  ");
+    printColoredStatus("Late", "-- Late  ");
+    printColoredStatus("Excuse", "-- Excuse  ");
+    printColoredStatus("Absent", "-- Absent  ");
+    cout << "\033[0m-- Not Yet Taken\n";
+    cout << line << "\n";
+
     // Display the number of training days
     cout << setw(15) << left << "TRAINING DAY";
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
@@ -583,19 +651,47 @@ void viewAttendance(User *user, int index)
     }
     cout << endl;
 
-    // Display the user's status in -- form
-    // WIP: the -- will be converted into colored text to represent the user's status
+    // Display the user's status
     cout << setw(14) << left << "STATUS";
     cout << "|";
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
     {
-        cout << (user + index)->status[i] << "|";
+        // Display for empty status
+        if ((user + index)->status[i].empty()){
+            cout << "--";
+        }
+        // Display colored text based on the user status
+        else
+        {
+            printColoredStatus((user + index)->status[i], "--"); // Display
+            statusCounter(user, index, i); // Count the status
+        }
+        cout << "|";
     }
-
+    cout << "\n";
+    cout << line << "\n";
     cout << endl;
+
+    // Display attendance summary with colors
+    cout << string(21, ' ') << "ATTENDANCE SUMMARY" << "\n";
+    cout << line << "\n";
+
+    // Row 1
+    printColoredStatus("Present", "Present");
+    cout << left << setw(10) << "" << ": " << setw(20) << (user + index)->numPresent;
+    printColoredStatus("Late", "Late");
+    cout << left << setw(13) << "" << ": " << (user + index)->numLate << "\n";
+
+    // Row 2
+    printColoredStatus("Excuse", "Excuse");
+    cout << left << setw(11) << "" << ": " << setw(20) << (user + index)->numExcuse;
+    printColoredStatus("Absent", "Absent");
+    cout << left << setw(11) << "" << ": " << (user + index)->numAbsent << "\n";
+
+    cout << line << "\n";
 }
 
-// WIP: Staff officer can take cadet's attendance
+// Function for the staff officer to take cadets attendanc
 void takeAttendance(User *user, int numUser, string company, string platoon)
 {
     int trainingDay = 0;
@@ -649,9 +745,10 @@ void takeAttendance(User *user, int numUser, string staff)
     string company = "",
            platoon = "";
 
-    if (staff == "S1"){
-    choice = userMenu("Company Menu");
-    company = companyConverter(choice);
+    if (staff == "S1")
+    {
+        choice = userMenu("Company Menu");
+        company = companyConverter(choice);
     }
 
     choice = userMenu("Platoon Menu");
@@ -724,7 +821,7 @@ void usersFeature(User *user, int index)
                 }
                 else if (staff == "S3")
                 {
-                      takeAttendance(advanceCadets, numAdvanceCadets, staff);
+                    takeAttendance(advanceCadets, numAdvanceCadets, staff);
                 }
                 break;
             case 3: // View Announcements
