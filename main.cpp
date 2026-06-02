@@ -10,7 +10,7 @@ using namespace std;
 const int MAX_USER = 100;
 const int NUM_TRAINING_DAY = 15;
 
-// Add at top with your other constants
+// User files
 const string FILE_BASIC = "basicCadet.txt";
 const string FILE_ADVANCE = "advanceCadet.txt";
 const string FILE_OFFICER = "staffOfficer.txt";
@@ -109,6 +109,12 @@ void displayUserMenu(string typeMenu)
         cout << "3. 3rd Platoon\n";
         cout << "4. 4th Platoon\n";
     }
+    else if (typeMenu == "Staff Menu")
+    {
+        cout << "Staff\n";
+        cout << "1. S1\n";
+        cout << "2. S3\n";
+    }
     else if (typeMenu == "Status Menu")
     {
         cout << "Status\n";
@@ -182,6 +188,18 @@ string platoonConverter(int platoon)
     }
 }
 
+string staffConverter(int staff)
+{
+
+    switch (staff)
+    {
+    case 1:
+        return "S1";
+    case 2:
+        return "S3";
+    }
+}
+
 string statusConverter(int status)
 {
     switch (status)
@@ -236,8 +254,9 @@ void registerRank(User *user, int index)
 // Function to register the staff of advance cadets, staff officer and brigade staff
 void registerStaff(User *user, int index)
 {
-    cout << "Staff(ex. S3)  : ";
-    getline(cin, (user + index)->staff);
+    int staff = 0;
+    staff = userMenu("Staff Menu");
+    (user + index)->staff = staffConverter(staff);
 }
 
 // Function that removes the space in text
