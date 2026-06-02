@@ -49,12 +49,30 @@ struct Announcement
     string note = "";
 };
 
+// Function that clear the screen
+void clearScreen(){
+cout << "\033[2J\033[1;1H";
+}
+
+// Displays a centered title with border
+void displayHeader(string title)
+{
+    clearScreen();
+    int borderWidth = 33;                        // Total width of the border
+    int titleLength = title.length();            // Length of the title text
+    int spaces = (borderWidth - titleLength) / 2; // Spaces needed to center title
+
+    cout << string(borderWidth, '=') << "\n";
+    cout << string(spaces, ' ') << title << "\n";
+    cout << string(borderWidth, '=') << "\n";
+}
+
 // Function that display the user menu
 void displayUserMenu(string typeMenu)
 {
+    displayHeader("UnitSync");
     if (typeMenu == "Main")
     {
-        cout << "Welcome to UnitSync!\n\n";
         cout << "Menu:\n";
         cout << "1. Register\n";
         cout << "2. Log In\n";
@@ -156,7 +174,7 @@ void roleConverter(User *user, int role, int index)
     }
 }
 
-// Function that convert company option to string
+// Function that convert company choice to string
 string companyConverter(int company)
 {
     switch (company)
@@ -172,7 +190,7 @@ string companyConverter(int company)
     }
 }
 
-// Function that convert platoon option to string
+// Function that convert platoon choice to string
 string platoonConverter(int platoon)
 {
     switch (platoon)
@@ -188,6 +206,7 @@ string platoonConverter(int platoon)
     }
 }
 
+// Function that convert staff choice to string
 string staffConverter(int staff)
 {
 
