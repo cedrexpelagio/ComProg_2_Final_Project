@@ -70,7 +70,7 @@ void displayHeader(string title)
 // Function that display the user menu
 void displayUserMenu(string typeMenu)
 {
-    displayHeader("UnitSync");
+    // displayHeader("UnitSync");
     if (typeMenu == "Main")
     {
         cout << "Menu:\n";
@@ -343,6 +343,7 @@ void writeFile(fstream &file, User *user, int index)
     file << (user + index)->staff << ",";
     file << (user + index)->password << ",";
     file << (user + index)->numPresent << ",";
+    file << (user + index)->numLate << ",";
     file << (user + index)->numAbsent << ",";
     file << (user + index)->numExcuse << ",";
 
@@ -416,6 +417,9 @@ int loadUser(User *user, string fileName)
         // Convert string to int
         getline(ss, temp, ',');
         (user + index)->numPresent = stoi(temp);
+
+         getline(ss, temp, ',');
+        (user + index)->numLate = stoi(temp);
 
         getline(ss, temp, ',');
         (user + index)->numAbsent = stoi(temp);

@@ -1,3 +1,1 @@
-DELACRUZ.JOSE,DELA CRUZ,JOSE,PERA,LQ-00023-2025,BSA-1-1,Alpha,1st Platoon,Basic Cadet,,,DELACRUZ-00023-0,0,0,0,Late,Present,--,--,--,--,--,--,--,--,--,--,--,--,--
-BRONCANO.JOHNJAY,BRONCANO,JOHN JAY,ECO,LQ-00042-2025,BSBIO-1-1,Alpha,1st Platoon,Basic Cadet,,,BRONCANO-00042-1,0,0,0,Present,Present,--,--,--,--,--,--,--,--,--,--,--,--,--
-DELAPENA.ROCKYBOY,DELA PENA,ROCKY BOY,UNO,LQ-00045-2025,BSCE-1-2,Alpha,1st Platoon,Basic Cadet,,,DELAPENA-00045-2,0,0,0,Absent,Present,--,--,--,--,--,--,--,--,--,--,--,--,--
+ARO.ERLLORRENZ,ARO,ERL LORRENZ,DELOS SANTOS,LQ-00090-2025,BSIT-1-1,Bravo,2nd Platoon,Basic Cadet,,,ARO-00090-0,0,0,0,0,Absent,--,--,--,--,--,--,--,--,--,--,--,--,--,--
