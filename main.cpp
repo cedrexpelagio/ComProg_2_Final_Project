@@ -50,16 +50,17 @@ struct Announcement
 };
 
 // Function that clear the screen
-void clearScreen(){
-cout << "\033[2J\033[1;1H";
+void clearScreen()
+{
+    cout << "\033[2J\033[1;1H";
 }
 
 // Displays a centered title with border
 void displayHeader(string title)
 {
     clearScreen();
-    int borderWidth = 33;                        // Total width of the border
-    int titleLength = title.length();            // Length of the title text
+    int borderWidth = 33;                         // Total width of the border
+    int titleLength = title.length();             // Length of the title text
     int spaces = (borderWidth - titleLength) / 2; // Spaces needed to center title
 
     cout << string(borderWidth, '=') << "\n";
@@ -418,7 +419,7 @@ int loadUser(User *user, string fileName)
         getline(ss, temp, ',');
         (user + index)->numPresent = stoi(temp);
 
-         getline(ss, temp, ',');
+        getline(ss, temp, ',');
         (user + index)->numLate = stoi(temp);
 
         getline(ss, temp, ',');
@@ -798,6 +799,82 @@ void takeAttendance(User *user, int numUser, string staff)
     takeAttendance(user, numUser, company, platoon);
 }
 
+// Function the display the announcement
+void displayAnnouncement(Announcement *announcement)
+{
+    string line = string(60, '-');
+    string boldLine = string(60, '=');
+
+
+    // Display the announcements
+    cout << boldLine << "\n";
+    cout << string(20, ' ') << "!! ANNOUNCEMENT !!\n";
+    cout << boldLine << "\n";
+    cout << left << setw(10) << "WHAT"    << ": " << announcement->what   << "\n";
+    cout << left << setw(10) << "WHO"     << ": " << announcement->who    << "\n";
+    cout << left << setw(10) << "WHERE"   << ": " << announcement->where  << "\n";
+    cout << left << setw(10) << "WHEN"    << ": " << announcement->when   << "\n";
+    cout << left << setw(10) << "ATTIRE"  << ": " << announcement->attire << "\n";
+    cout << line << "\n";
+    cout << "TO BRING:\n" << announcement->toBring;
+    cout << line << "\n";
+    cout << "NOTE:\n"     << announcement->note;
+    cout << boldLine << "\n";
+}
+
+// Function for the brigade staff to create an announcement
+void createAnnouncement()
+{
+    Announcement *announcement = new Announcement;
+
+    // Temporary variable for to bring and note variable in the structure
+    string item = "";
+    string note = "";
+
+    cin.ignore();
+    cout << "WHAT: ";
+    getline(cin, announcement->what);
+    cout << "WHO: ";
+    getline(cin, announcement->who);
+    cout << "WHERE: ";
+    getline(cin, announcement->where);
+    cout << "WHEH: ";
+    getline(cin, announcement->when);
+    cout << "ATTIRE: ";
+    getline(cin, announcement->attire);
+
+    cout << "TO BRING\n";
+    cout << "(Type 'done' when finished)\n";
+
+    while (item != "done") // Loop until the user enter 'done'
+    {
+        cout << "- ";
+        getline(cin, item);
+        if (item != "done")
+        {
+            // Store the user item into the toBring variable
+            announcement->toBring += "[/] " + item + "\n";
+        }
+    }
+
+    cout << "NOTE\n";
+    cout << "(Type 'done' when finished)\n";
+
+    while (note != "done") // Loop until the user enter 'done'
+    {
+        cout << "- ";
+        getline(cin, note);
+        if (note != "done")
+            // Store the user note into the note variable
+            announcement->note += "[/] " + note + "\n";
+    }
+
+    cout << "\nAnnouncement Created!\n";
+
+    // Debugging purpose
+    displayAnnouncement(announcement);
+}
+
 // Function for all user feature
 void usersFeature(User *user, int index)
 {
@@ -887,6 +964,7 @@ void usersFeature(User *user, int index)
                 viewProfile(user, index);
                 break;
             case 2: // Create an Announcement
+                createAnnouncement();
                 break;
             case 3: // List of User
                 break;
