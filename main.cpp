@@ -15,6 +15,7 @@ const string FILE_BASIC = "basicCadet.txt";
 const string FILE_ADVANCE = "advanceCadet.txt";
 const string FILE_OFFICER = "staffOfficer.txt";
 const string FILE_BRIGADE = "brigadeStaff.txt";
+const string FILE_ANNOUNCE = "announcement.txt";
 
 // Struct for User's data
 struct User
@@ -805,21 +806,47 @@ void displayAnnouncement(Announcement *announcement)
     string line = string(60, '-');
     string boldLine = string(60, '=');
 
-
     // Display the announcements
     cout << boldLine << "\n";
     cout << string(20, ' ') << "!! ANNOUNCEMENT !!\n";
     cout << boldLine << "\n";
-    cout << left << setw(10) << "WHAT"    << ": " << announcement->what   << "\n";
-    cout << left << setw(10) << "WHO"     << ": " << announcement->who    << "\n";
-    cout << left << setw(10) << "WHERE"   << ": " << announcement->where  << "\n";
-    cout << left << setw(10) << "WHEN"    << ": " << announcement->when   << "\n";
-    cout << left << setw(10) << "ATTIRE"  << ": " << announcement->attire << "\n";
+    cout << left << setw(10) << "WHAT" << ": " << announcement->what << "\n";
+    cout << left << setw(10) << "WHO" << ": " << announcement->who << "\n";
+    cout << left << setw(10) << "WHERE" << ": " << announcement->where << "\n";
+    cout << left << setw(10) << "WHEN" << ": " << announcement->when << "\n";
+    cout << left << setw(10) << "ATTIRE" << ": " << announcement->attire << "\n";
     cout << line << "\n";
-    cout << "TO BRING:\n" << announcement->toBring;
+    cout << "TO BRING:\n"
+         << announcement->toBring;
     cout << line << "\n";
-    cout << "NOTE:\n"     << announcement->note;
+    cout << "NOTE:\n"
+         << announcement->note;
     cout << boldLine << "\n";
+}
+
+// Function that can save the announcement
+void saveAnnouncement(Announcement *announcement)
+{
+    fstream file;
+
+    file.open(FILE_ANNOUNCE, ios::out);
+
+    if (file.is_open())
+    {
+        file << announcement->what << ",";
+        file << announcement->who << ",";
+        file << announcement->where << ",";
+        file << announcement->when << ",";
+        file << announcement->who << ",";
+        file << announcement->toBring << ",";
+        file << announcement->note << ",";
+    }
+    else
+    {
+        cout << "File not open\n";
+    }
+
+    file.close();
 }
 
 // Function for the brigade staff to create an announcement
@@ -870,6 +897,8 @@ void createAnnouncement()
     }
 
     cout << "\nAnnouncement Created!\n";
+
+    saveAnnouncement(announcement);
 
     // Debugging purpose
     displayAnnouncement(announcement);
