@@ -800,6 +800,32 @@ void takeAttendance(User *user, int numUser, string staff)
     takeAttendance(user, numUser, company, platoon);
 }
 
+// Function that load the announcement
+void loadAnnouncement(Announcement *announcement)
+{
+    
+    fstream file;
+    file.open(FILE_ANNOUNCE, ios::in);
+
+    if (!file.is_open())
+    {
+        cout << "No announcement found.\n";
+        return;
+    }
+
+    string temp = "";
+
+    getline(file, announcement->what,     ',');
+    getline(file, announcement->who,      ',');
+    getline(file, announcement->where,    ',');
+    getline(file, announcement->when,     ',');
+    getline(file, announcement->attire,   ',');
+    getline(file, announcement->toBring,  ',');
+    getline(file, announcement->note,     ',');
+
+    file.close();
+}
+
 // Function the display the announcement
 void displayAnnouncement(Announcement *announcement)
 {
@@ -917,6 +943,9 @@ void usersFeature(User *user, int index)
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
     User *staffOfficers = new User[MAX_USER];
+    // Load Announcement
+    Announcement *announcement = new Announcement;
+    loadAnnouncement(announcement);
 
     // Store the number of user based on type
     int numCadets = loadUser(basicCadets, FILE_BASIC);
@@ -937,7 +966,7 @@ void usersFeature(User *user, int index)
                 viewProfile(user, index);
                 break;
             case 2: // View Announcements
-                cout << "Coming Soon";
+                displayAnnouncement(announcement);
                 break;
             case 3: // Display the user's attendance and status
                 viewAttendance(user, index);
@@ -972,6 +1001,7 @@ void usersFeature(User *user, int index)
                 }
                 break;
             case 3: // View Announcements
+                displayAnnouncement(announcement);
                 break;
             case 4: // Log out
                 running = false;
@@ -1011,6 +1041,7 @@ void usersFeature(User *user, int index)
     delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
+    delete announcement;
 }
 
 int main()
