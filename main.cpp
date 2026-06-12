@@ -875,10 +875,10 @@ void saveAnnouncement(Announcement *announcement)
     file.close();
 }
 
+// Function that display the header for listing based on role
 void userTableHeader(string role)
 {
     // User information header
-
     cout << setw(5) << left << "No.";
 
     if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
@@ -915,6 +915,7 @@ void displayUser(User *user, int index)
          << setw(16) << left << (user + index)->middleName << setw(12) << left << (user + index)->program << endl;
 }
 
+// Helper function to list the users
 void list(User *user, int numUser)
 {
     for (int i = 0; i < numUser; i++)
@@ -923,6 +924,9 @@ void list(User *user, int numUser)
     }
 }
 
+
+// Function that displat every user in the programs file
+// WIP: UI will be improve later
 void listOfUsers()
 {
     // Load all users
@@ -937,7 +941,6 @@ void listOfUsers()
     int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
     int numBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
 
-    // Display Basic Cadets
     cout << "\nBasic Cadets" << endl;
     userTableHeader("Basic Cadet");
     list(basicCadets, numCadets);
@@ -1143,9 +1146,6 @@ void usersFeature(User *user, int index)
         }
     }
 
-    delete[] basicCadets;
-    delete[] advanceCadets;
-    delete[] staffOfficers;
     delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
