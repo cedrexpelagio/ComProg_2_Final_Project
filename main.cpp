@@ -863,7 +863,7 @@ void saveAnnouncement(Announcement *announcement)
         file << announcement->who << ",";
         file << announcement->where << ",";
         file << announcement->when << ",";
-        file << announcement->who << ",";
+        file << announcement->attire << ",";
         file << announcement->toBring << ",";
         file << announcement->note << ",";
     }
@@ -873,6 +873,46 @@ void saveAnnouncement(Announcement *announcement)
     }
 
     file.close();
+}
+
+void listOfUsers(){
+    // Load all users
+    User *basicCadets = new User[MAX_USER];
+    User *advanceCadets = new User[MAX_USER];
+    User *staffOfficers = new User[MAX_USER];
+    User *brigadeStaff = new User[MAX_USER];
+
+    // Store the number of user based on type
+    int numCadets = loadUser(basicCadets, FILE_BASIC);
+    int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
+    int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
+    int numBrigade = loadUser(brigadeStaff, FILE_BRIGADE);
+
+    // Free Memory
+    delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;
+    delete[] brigadeStaff;
+}
+
+void smartSearch(){
+     // Load all users
+    User *basicCadets = new User[MAX_USER];
+    User *advanceCadets = new User[MAX_USER];
+    User *staffOfficers = new User[MAX_USER];
+    User *brigadeStaff = new User[MAX_USER];
+
+    // Store the number of user based on type
+    int numCadets = loadUser(basicCadets, FILE_BASIC);
+    int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
+    int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
+    int numBrigade = loadUser(brigadeStaff, FILE_BRIGADE);
+
+    // Free Memory
+    delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;
+    delete[] brigadeStaff;
 }
 
 // Function for the brigade staff to create an announcement
@@ -891,7 +931,7 @@ void createAnnouncement()
     getline(cin, announcement->who);
     cout << "WHERE: ";
     getline(cin, announcement->where);
-    cout << "WHEH: ";
+    cout << "WHEN: ";
     getline(cin, announcement->when);
     cout << "ATTIRE: ";
     getline(cin, announcement->attire);
@@ -925,9 +965,6 @@ void createAnnouncement()
     cout << "\nAnnouncement Created!\n";
 
     saveAnnouncement(announcement);
-
-    // Debugging purpose
-    displayAnnouncement(announcement);
 }
 
 // Function for all user feature
@@ -1039,6 +1076,8 @@ void usersFeature(User *user, int index)
     }
 
     delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
     delete announcement;
