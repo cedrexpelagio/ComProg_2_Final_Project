@@ -990,11 +990,57 @@ void listOfUsers()
     delete[] brigadeStaffs;
 }
 
-void cadetSmartSearch(User *user, int numUser)
+void attendanceSmartSearch(User *user, int numUser, string target, string type)
+{
+
+    for (int i = 0; i < numUser; i++)
+    {
+
+        if (type == "Company")
+        {
+            if ((user + i)->company == target)
+            {
+                displayUser(user, i);
+            }
+        }
+        else if (type == "Platoon")
+        {
+            if ((user + i)->platoon == target)
+            {
+                displayUser(user, i);
+            }
+        }
+        else if (type == "Program")
+        {
+            if ((user + i)->program == target)
+            {
+                displayUser(user, i);
+            }
+        }
+        else if (type == "Sure Name")
+        {
+            if ((user + i)->sureName == target)
+            {
+                displayUser(user, i);
+            }
+        }
+        else if (type == "Last Name")
+        {
+            if ((user + i)->lastName == target)
+            {
+                displayUser(user, i);
+            }
+        }
+    }
+}
+
+void attendanceSmartSearch(User *user, int numUser)
 {
     string role = (user + 0)->role;
+    int choice = 0;
     int basicCadetChoice = 0;
     int advanceCadetChoice = 0;
+    string target = "";
 
     if (role == "Basic Cadet")
     {
@@ -1008,17 +1054,43 @@ void cadetSmartSearch(User *user, int numUser)
     // Search by Company
     if (basicCadetChoice == 1)
     {
+        choice = userMenu("Company Menu");
+        target = companyConverter(choice);
+
+        attendanceSmartSearch(user, numUser, target, "Company");
     }
     // Search by Platoon
     else if (basicCadetChoice == 2 || advanceCadetChoice == 1)
     {
+        choice = userMenu("Platoon Menu");
+        target = platoonConverter(choice);
+        attendanceSmartSearch(user, numUser, target, "Platoon");
     }
     // Search by Program
-    else if (basicCadetChoice == 3 || advanceCadetChoice == 2){
+    else if (basicCadetChoice == 3 || advanceCadetChoice == 2)
+    {
+        cin.ignore();
+        cout << "Enter Program: ";
+        getline(cin, target);
+        attendanceSmartSearch(user, numUser, target, "Program");
     }
     // Search by Name
     else if (basicCadetChoice == 4 || advanceCadetChoice == 3)
     {
+        choice = userMenu("Search By Name Menu");
+        cin.ignore();
+        if (choice == 1)
+        {
+            cout << "Enter Last Name: ";
+            getline(cin, target);
+            attendanceSmartSearch(user, numUser, target, "Last Name");
+        }
+        else if (choice == 2)
+        {
+            cout << "Enter Sure Name: ";
+            getline(cin, target);
+            attendanceSmartSearch(user, numUser, target, "Sure Name");
+        }
     }
 }
 
@@ -1038,10 +1110,10 @@ void attendanceSmartSearch()
     switch (choice)
     {
     case 1:
-        cadetSmartSearch(basicCadets, numCadets);
+        attendanceSmartSearch(basicCadets, numCadets);
         break;
     case 2:
-        cadetSmartSearch(advanceCadets, numAdvanceCadets);
+        attendanceSmartSearch(advanceCadets, numAdvanceCadets);
         break;
     }
 
@@ -1201,7 +1273,7 @@ void usersFeature(User *user, int index)
                 listOfUsers();
                 break;
             case 4: // Attendance Smart Search
-            attendanceSmartSearch();
+                attendanceSmartSearch();
                 break;
             case 5: // Log out
                 running = false;
