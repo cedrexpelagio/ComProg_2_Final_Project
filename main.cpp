@@ -803,7 +803,7 @@ void takeAttendance(User *user, int numUser, string staff)
 // Function that load the announcement
 void loadAnnouncement(Announcement *announcement)
 {
-    
+
     fstream file;
     file.open(FILE_ANNOUNCE, ios::in);
 
@@ -815,13 +815,13 @@ void loadAnnouncement(Announcement *announcement)
 
     string temp = "";
 
-    getline(file, announcement->what,     ',');
-    getline(file, announcement->who,      ',');
-    getline(file, announcement->where,    ',');
-    getline(file, announcement->when,     ',');
-    getline(file, announcement->attire,   ',');
-    getline(file, announcement->toBring,  ',');
-    getline(file, announcement->note,     ',');
+    getline(file, announcement->what, ',');
+    getline(file, announcement->who, ',');
+    getline(file, announcement->where, ',');
+    getline(file, announcement->when, ',');
+    getline(file, announcement->attire, ',');
+    getline(file, announcement->toBring, ',');
+    getline(file, announcement->note, ',');
 
     file.close();
 }
@@ -875,28 +875,95 @@ void saveAnnouncement(Announcement *announcement)
     file.close();
 }
 
-void listOfUsers(){
+void userTableHeader(string role)
+{
+    // User information header
+
+    cout << setw(5) << left << "No.";
+
+    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
+    {
+        cout << setw(10) << left << "Rank";
+        if (role == "Staff Officer" || role == "Brigade Staff")
+        {
+            cout << setw(10) << left << "Staff";
+        }
+    }
+
+    cout << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
+         << setw(16) << left << "Middle Name" << setw(12) << left << "Program" << endl;
+}
+
+void displayUser(User *user, int index)
+{
+    // display user information
+
+    string role = (user + index)->role;
+
+    cout << setw(5) << left << to_string(index + 1);
+
+    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
+    {
+        cout << setw(10) << left << (user + index)->rank;
+        if (role == "Staff Officer" || role == "Brigade Staff")
+        {
+            cout << setw(10) << left << (user + index)->staff;
+        }
+    }
+
+    cout << setw(14) << left << (user + index)->lastName << setw(15) << left << (user + index)->sureName
+         << setw(16) << left << (user + index)->middleName << setw(12) << left << (user + index)->program << endl;
+}
+
+void list(User *user, int numUser)
+{
+    for (int i = 0; i < numUser; i++)
+    {
+        displayUser(user, i);
+    }
+}
+
+void listOfUsers()
+{
     // Load all users
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
     User *staffOfficers = new User[MAX_USER];
-    User *brigadeStaff = new User[MAX_USER];
+    User *brigadeStaffs = new User[MAX_USER];
 
     // Store the number of user based on type
     int numCadets = loadUser(basicCadets, FILE_BASIC);
     int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
     int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
-    int numBrigade = loadUser(brigadeStaff, FILE_BRIGADE);
+    int numBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
+
+    // Display Basic Cadets
+    cout << "\nBasic Cadets" << endl;
+    userTableHeader("Basic Cadet");
+    list(basicCadets, numCadets);
+
+    cout << "\nAdvance Cadets" << endl;
+    userTableHeader("Advance Cadet");
+    list(advanceCadets, numAdvanceCadets);
+
+    cout << "\nStaff Officer" << endl;
+    userTableHeader("Staff Officer");
+    list(staffOfficers, numOfficers);
+
+    cout << "\nBrigade Staffs" << endl;
+    userTableHeader("Brigade Staff");
+    list(brigadeStaffs, numBrigade);
 
     // Free Memory
     delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
-    delete[] brigadeStaff;
+    delete[] brigadeStaffs;
 }
 
-void smartSearch(){
-     // Load all users
+void smartSearch()
+{
+    // Load all users
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
     User *staffOfficers = new User[MAX_USER];
@@ -1063,6 +1130,7 @@ void usersFeature(User *user, int index)
                 createAnnouncement();
                 break;
             case 3: // List of User
+                listOfUsers();
                 break;
             case 4: // Smart Search
                 break;
@@ -1077,7 +1145,8 @@ void usersFeature(User *user, int index)
 
     delete[] basicCadets;
     delete[] advanceCadets;
-    delete[] staffOfficers;delete[] basicCadets;
+    delete[] staffOfficers;
+    delete[] basicCadets;
     delete[] advanceCadets;
     delete[] staffOfficers;
     delete announcement;
