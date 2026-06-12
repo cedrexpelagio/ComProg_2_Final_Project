@@ -109,8 +109,8 @@ void displayUserMenu(string typeMenu)
         cout << "Menu\n";
         cout << "1. View My Profile\n";
         cout << "2. Create an Announcement\n";
-        cout << "3. List of User\n";
-        cout << "4. Smart Search\n";
+        cout << "3. List of Users\n";
+        cout << "4. Attendance Smart Search\n";
         cout << "5. Log Out\n";
     }
     else if (typeMenu == "Company Menu")
@@ -142,6 +142,33 @@ void displayUserMenu(string typeMenu)
         cout << "[2] Late     ";
         cout << "[3] Excuse     ";
         cout << "[4] Absent     \n";
+    }
+    else if (typeMenu == "Role Smart Search")
+    {
+        cout << "Search:\n";
+        cout << "1. Basic Cadets\n";
+        cout << "2. Advance Cadets\n";
+    }
+    else if (typeMenu == "Search By Name Menu")
+    {
+        cout << "Search by:\n";
+        cout << "1. Last Name\n";
+        cout << "2. Sure Name\n";
+    }
+    else if (typeMenu == "Basic Cadet Search Menu")
+    {
+        cout << "Search by:\n";
+        cout << "1. Company\n";
+        cout << "2. Platoon\n";
+        cout << "3. Program\n";
+        cout << "4. Name\n";
+    }
+    else if (typeMenu == "Advance Cadet Search Menu")
+    {
+        cout << "Search by:\n";
+        cout << "1. Platoon\n";
+        cout << "2. Program\n";
+        cout << "3. Name\n";
     }
 }
 
@@ -924,7 +951,6 @@ void list(User *user, int numUser)
     }
 }
 
-
 // Function that displat every user in the programs file
 // WIP: UI will be improve later
 void listOfUsers()
@@ -964,25 +990,64 @@ void listOfUsers()
     delete[] brigadeStaffs;
 }
 
-void smartSearch()
+void cadetSmartSearch(User *user, int numUser)
 {
-    // Load all users
+    string role = (user + 0)->role;
+    int basicCadetChoice = 0;
+    int advanceCadetChoice = 0;
+
+    if (role == "Basic Cadet")
+    {
+        basicCadetChoice = userMenu("Basic Cadet Search Menu");
+    }
+    else if (role == "Advance Cadet")
+    {
+        advanceCadetChoice = userMenu("Advance Cadet Search Menu");
+    }
+
+    // Search by Company
+    if (basicCadetChoice == 1)
+    {
+    }
+    // Search by Platoon
+    else if (basicCadetChoice == 2 || advanceCadetChoice == 1)
+    {
+    }
+    // Search by Program
+    else if (basicCadetChoice == 3 || advanceCadetChoice == 2){
+    }
+    // Search by Name
+    else if (basicCadetChoice == 4 || advanceCadetChoice == 3)
+    {
+    }
+}
+
+void attendanceSmartSearch()
+{
+    int choice = 0;
+    // Load basic and advance cadets
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
-    User *staffOfficers = new User[MAX_USER];
-    User *brigadeStaff = new User[MAX_USER];
 
     // Store the number of user based on type
     int numCadets = loadUser(basicCadets, FILE_BASIC);
     int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
-    int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
-    int numBrigade = loadUser(brigadeStaff, FILE_BRIGADE);
+
+    choice = userMenu("Role Smart Search");
+
+    switch (choice)
+    {
+    case 1:
+        cadetSmartSearch(basicCadets, numCadets);
+        break;
+    case 2:
+        cadetSmartSearch(advanceCadets, numAdvanceCadets);
+        break;
+    }
 
     // Free Memory
     delete[] basicCadets;
     delete[] advanceCadets;
-    delete[] staffOfficers;
-    delete[] brigadeStaff;
 }
 
 // Function for the brigade staff to create an announcement
@@ -1135,7 +1200,8 @@ void usersFeature(User *user, int index)
             case 3: // List of User
                 listOfUsers();
                 break;
-            case 4: // Smart Search
+            case 4: // Attendance Smart Search
+            attendanceSmartSearch();
                 break;
             case 5: // Log out
                 running = false;
