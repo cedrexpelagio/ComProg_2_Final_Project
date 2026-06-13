@@ -990,8 +990,10 @@ void listOfUsers()
     delete[] brigadeStaffs;
 }
 
+// Overloading function for displaying user attendance based on brigade choice
 void attendanceSmartSearch(User *user, int numUser, string target, string type)
 {
+    bool find = false;
 
     for (int i = 0; i < numUser; i++)
     {
@@ -1001,6 +1003,7 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
             if ((user + i)->company == target)
             {
                 displayUser(user, i);
+                find = true;
             }
         }
         else if (type == "Platoon")
@@ -1008,6 +1011,7 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
             if ((user + i)->platoon == target)
             {
                 displayUser(user, i);
+                find = true;
             }
         }
         else if (type == "Program")
@@ -1015,6 +1019,7 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
             if ((user + i)->program == target)
             {
                 displayUser(user, i);
+                find = true;
             }
         }
         else if (type == "Sure Name")
@@ -1022,6 +1027,7 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
             if ((user + i)->sureName == target)
             {
                 displayUser(user, i);
+                find = true;
             }
         }
         else if (type == "Last Name")
@@ -1029,19 +1035,26 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
             if ((user + i)->lastName == target)
             {
                 displayUser(user, i);
+                find = true;
             }
         }
     }
+
+    if (!find){
+    cout << "\nNo User Found Match" << endl;
+    }
 }
 
+// Overloading function to search attendance in different conditions
 void attendanceSmartSearch(User *user, int numUser)
 {
-    string role = (user + 0)->role;
+    string role = (user + 0)->role; // Role Detection
     int choice = 0;
     int basicCadetChoice = 0;
     int advanceCadetChoice = 0;
     string target = "";
 
+    // Searh Menu 
     if (role == "Basic Cadet")
     {
         basicCadetChoice = userMenu("Basic Cadet Search Menu");
@@ -1094,6 +1107,7 @@ void attendanceSmartSearch(User *user, int numUser)
     }
 }
 
+// Overloading function for accessing the basic and advance cadets files
 void attendanceSmartSearch()
 {
     int choice = 0;
