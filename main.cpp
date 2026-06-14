@@ -56,6 +56,15 @@ void clearScreen()
     cout << "\033[2J\033[1;1H";
 }
 
+void displaySubHeader(string title, int width)
+{
+    string line = string(width, '-');
+
+    cout << line << "\n";
+    cout << " " << title << "\n";
+    cout << line << "\n";
+}
+
 // Displays a centered title with border
 void displayHeader(string title, int borderWidth)
 {
@@ -85,9 +94,7 @@ void displayUserMenu(string typeMenu, string userName = "")
     if (typeMenu == "Main")
     {
         displayHeader("UnitSync", width);
-        cout << line2 << "\n";
-        cout << " MAIN MENU\n";
-        cout << line2 << "\n";
+        displaySubHeader("MAIN MENU", width);
         cout << " 1. Register\n";
         cout << " 2. Log In\n";
         cout << " 3. Exit\n";
@@ -96,9 +103,7 @@ void displayUserMenu(string typeMenu, string userName = "")
     else if (typeMenu == "Role")
     {
         displayHeader("UnitSync", width);
-        cout << line2 << "\n";
-        cout << " ROLE SELECTION\n";
-        cout << line2 << "\n";
+        displaySubHeader("ROLE SELECTION", width);
         cout << " 1. Basic Cadet\n";
         cout << " 2. Advance Cadet\n";
         cout << " 3. Staff Officer\n";
@@ -108,9 +113,7 @@ void displayUserMenu(string typeMenu, string userName = "")
     else if (typeMenu == "Cadets Menu")
     {
         displayHeader("UnitSync", width);
-        cout << line2 << "\n";
-        cout << " User: " << userName << "\n";
-        cout << line2 << "\n";
+        displaySubHeader("User: " + userName, width);
         cout << " 1. View My Profile\n";
         cout << " 2. Announcements\n";
         cout << " 3. View My Attendance\n";
@@ -120,9 +123,7 @@ void displayUserMenu(string typeMenu, string userName = "")
     else if (typeMenu == "Staff Officer Menu")
     {
         displayHeader("UnitSync", width);
-        cout << line2 << "\n";
-        cout << " User: " << userName << "\n";
-        cout << line2 << "\n";
+        displaySubHeader("User: " + userName, width);
         cout << " 1. View My Profile\n";
         cout << " 2. Take Attendance\n";
         cout << " 3. Announcements\n";
@@ -132,9 +133,7 @@ void displayUserMenu(string typeMenu, string userName = "")
     else if (typeMenu == "Brigade Staff Menu")
     {
         displayHeader("UnitSync", width);
-        cout << line2 << "\n";
-        cout << " User: " << userName << "\n";
-        cout << line2 << "\n";
+        displaySubHeader("User: " + userName, width);
         cout << " 1. View My Profile\n";
         cout << " 2. Create an Announcement\n";
         cout << " 3. List of Users\n";
@@ -172,14 +171,14 @@ void displayUserMenu(string typeMenu, string userName = "")
     }
     else if (typeMenu == "Status Menu")
     {
-        cout << line2 << "\n";
+        cout << line2 << line2 << "\n";
         cout << " STATUS SELECTION\n";
-        cout << line2 << "\n";
+        cout << line2 << line2 << "\n";
         cout << " [1] Present    ";
         cout << "[2] Late     ";
         cout << "[3] Excuse     ";
         cout << "[4] Absent\n";
-        cout << line1 << "\n";
+        cout << line1 << line1 << "\n";
     }
     else if (typeMenu == "Role Smart Search")
     {
@@ -284,7 +283,6 @@ string platoonConverter(int platoon)
 // Function that convert staff choice to string
 string staffConverter(int staff)
 {
-
     switch (staff)
     {
     case 1:
@@ -326,10 +324,10 @@ void companyPlatoonSelection(string *company, string *platoon)
 {
     int choice = 0;
 
-    choice = userMenu("Company Menu", "");
+    choice = userMenu("Company Menu");
     *company = companyConverter(choice);
 
-    choice = userMenu("Platoon Menu", "");
+    choice = userMenu("Platoon Menu");
     *platoon = platoonConverter(choice);
 }
 
@@ -337,7 +335,6 @@ void companyPlatoonSelection(string *company, string *platoon)
 // This is a required for every type of user
 void registerUser(User *user, int index)
 {
-    cin.ignore();
     cout << "Last Name(ex. DELA CRUZ)     : ";
     getline(cin, (user + index)->lastName);
     cout << "Sure Name(ex. JUAN)          : ";
@@ -556,6 +553,13 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     // Store the role
     string role = (user + *index)->role;
     int platoon = 0;
+    const int width = 40;
+
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
+
+    displayHeader("UnitSync", width);
+    displaySubHeader("REGISTRATION", width);
 
     registerUser(user, *index); // register student information
 
@@ -569,12 +573,10 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     // Registration of Advance Cadets
     else if (role == "Advance Cadet")
     {
-        // Select Platoon
-        platoon = userMenu("Platoon Menu", "");
-        (user + *index)->platoon = platoonConverter(platoon);
-
-        cin.ignore();
         registerRank(user, *index);
+        // Select Platoon
+        platoon = userMenu("Platoon Menu");
+        (user + *index)->platoon = platoonConverter(platoon);
     }
     // Registration of Staff Officers and Brigade Staff
     else if (role == "Staff Officer" || role == "Brigade Staff")
@@ -586,12 +588,20 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     (user + *index)->userName = generateUserName(user, *index);
     (user + *index)->password = generatePassword(user, *index);
 
-    cout << "\nUser Name: " << (user + *index)->userName << endl;
-    cout << "Your Password: " << (user + *index)->password << endl;
-    cout << "Please Save your password!\n";
+    displayHeader("UnitSync", width);
+    displaySubHeader("REGISTRATION", width);
+    cout << " User Name: " << (user + *index)->userName << endl;
+    cout << " Your Password: " << (user + *index)->password << endl;
+    cout << " Please Save your password!\n";
+    cout << line2 << endl;
 
     saveUser(user, *index, fileName);
-    cout << "\nRegistration Complete!\n";
+
+    cout << line1 << endl;
+    cout << " [/] Registration Complete!\n";
+    cout << line1 << endl;
+
+    pressEnter();
 
     (*index)++;
     (*numberOfUser)++;
@@ -605,13 +615,12 @@ bool verifyUserName(User *user, string userName, int numUser, int *index)
     {
         if (userName == (user + i)->userName) // Condition to verify the user name
         {
-            cout << "Name Exist\n";
             *index = i;  // Store the index of the user
             return true; // return if the user name exist
         }
     }
 
-    cout << "No Name Found\n";
+    cout << " [!] No Name Found\n";
     return false; // return if the user name is not found
 }
 
@@ -621,12 +630,11 @@ bool verifyPassword(User *user, string password, int index)
 
     if (password == (user + index)->password) // Condition to verify the password
     {
-        cout << "Password Correct\n";
         return true; // return if the password is correct
     }
     else
     {
-        cout << "Password Incorrect\n";
+        cout << " [!] Password Incorrect\n";
         return false; // return if the password is incorrect
     }
 }
@@ -637,8 +645,11 @@ void userLogIn(User *user, int numUser, int *index)
     string userName = "";
     string password = "";
     bool verification = false;
+    const int width = 40;
 
-    cin.ignore();
+    displayHeader("UnitSync", width);
+    displaySubHeader("LOG IN", width);
+
     do
     {
         cout << "User Name: ";
@@ -660,14 +671,12 @@ void userLogIn(User *user, int numUser, int *index)
 void viewProfile(User *user, int index)
 {
     string role = (user + index)->role;
-    string line1 = string(70, '=');
-    string line2 = string(70, '-');
+    const int width = 70;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
 
     // Display the user's profile using setw
-    cout << "\n";
-    cout << line1 << "\n";
-    cout << right << setw(41) << "USER PROFILE" << "\n";
-    cout << line1 << "\n";
+    displayHeader("USER PROFILE", width);
     cout << left << setw(15) << "User Name" << ": " << (user + index)->userName << "\n";
     cout << line2 << "\n";
     cout << left << setw(15) << "Last Name" << ": " << setw(25) << (user + index)->lastName
@@ -697,6 +706,7 @@ void viewProfile(User *user, int index)
     cout << line1 << "\n";
 }
 
+// Function for displaying colored text
 void printColoredStatus(string status, string text)
 {
 
@@ -718,6 +728,7 @@ void printColoredStatus(string status, string text)
     }
 }
 
+// Function to count the status of users
 void statusCounter(User *user, int index, int statusIndex)
 {
     string status = (user + index)->status[statusIndex];
@@ -740,33 +751,48 @@ void statusCounter(User *user, int index, int statusIndex)
     }
 }
 
-// Function the display the user's attendance and status
-void viewAttendance(User *user, int index)
+// Function that display the header for listing based on role
+void userTableHeader(string role)
 {
-    string line = string(60, '-');
-    string boldLine = string(60, '=');
+    // User information header
+    cout << setw(5) << left << "No.";
 
-    // Reset counts before recalculating
-    (user + index)->numPresent = 0;
-    (user + index)->numLate = 0;
-    (user + index)->numExcuse = 0;
-    (user + index)->numAbsent = 0;
+    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
+    {
+        cout << setw(10) << left << "Rank";
+        if (role == "Staff Officer" || role == "Brigade Staff")
+        {
+            cout << setw(10) << left << "Staff";
+        }
+    }
 
-    // Display feature title
-    cout << boldLine << "\n";
-    cout << string(22, ' ') << "USER ATTENDANCE" << "\n";
-    cout << boldLine << "\n";
+    cout << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
+         << setw(16) << left << "Middle Name" << setw(12) << left << "Program";
+}
 
-    // Color representation legend
-    cout << "Legend:\n";
-    printColoredStatus("Present", "== Present  ");
-    printColoredStatus("Late", "== Late  ");
-    printColoredStatus("Excuse", "== Excuse  ");
-    printColoredStatus("Absent", "== Absent  ");
-    cout << "\033[0m-- Not Yet Taken\n";
-    cout << line << "\n";
+void displayUser(User *user, int index, int number)
+{
+    // display user information
 
-    // Display the number of training days
+    string role = (user + index)->role;
+
+    cout << setw(5) << left << to_string(number);
+
+    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
+    {
+        cout << setw(10) << left << (user + index)->rank;
+        if (role == "Staff Officer" || role == "Brigade Staff")
+        {
+            cout << setw(10) << left << (user + index)->staff;
+        }
+    }
+
+    cout << setw(14) << left << (user + index)->lastName << setw(15) << left << (user + index)->sureName
+         << setw(16) << left << (user + index)->middleName << setw(12) << left << (user + index)->program;
+}
+
+void trainingDayHeader()
+{
     cout << setw(15) << left << "TRAINING DAY";
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
     {
@@ -776,9 +802,10 @@ void viewAttendance(User *user, int index)
         }
         cout << to_string(i + 1) << " ";
     }
-    cout << endl;
+}
 
-    // Display the user's status
+void displayStatus(User *user, int index)
+{
     cout << setw(14) << left << "STATUS";
     cout << "|";
     for (int i = 0; i < NUM_TRAINING_DAY; i++)
@@ -796,13 +823,47 @@ void viewAttendance(User *user, int index)
         }
         cout << "|";
     }
-    cout << "\n";
-    cout << line << "\n";
+}
+// Function the display the user's attendance and status
+void viewAttendance(User *user, int index)
+{
+    const int width = 60;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
+
+    // Reset counts before recalculating
+    (user + index)->numPresent = 0;
+    (user + index)->numLate = 0;
+    (user + index)->numExcuse = 0;
+    (user + index)->numAbsent = 0;
+
+    // Display feature title
+
+    displayHeader("USER ATTENDANCE", width);
+
+    // Color representation legend
+    cout << "Legend:\n";
+    printColoredStatus("Present", "== Present  ");
+    printColoredStatus("Late", "== Late  ");
+    printColoredStatus("Excuse", "== Excuse  ");
+    printColoredStatus("Absent", "== Absent  ");
+    cout << "\033[0m-- Not Yet Taken\n";
+    cout << line2 << "\n";
+
+    // Display the number of training days
+    trainingDayHeader();
+    cout << endl;
+
+    // Display the user's status
+    displayStatus(user, index);
+    cout << endl;
+
+    cout << line2 << "\n";
     cout << endl;
 
     // Display attendance summary with colors
     cout << string(21, ' ') << "ATTENDANCE SUMMARY" << "\n";
-    cout << line << "\n";
+    cout << line2 << "\n";
 
     // Row 1
     printColoredStatus("Present", "Present");
@@ -816,7 +877,7 @@ void viewAttendance(User *user, int index)
     printColoredStatus("Absent", "Absent");
     cout << left << setw(11) << "" << ": " << (user + index)->numAbsent << "\n";
 
-    cout << line << "\n";
+    cout << line1 << "\n";
 }
 
 // Function for the staff officer to take cadets attendanc
@@ -844,8 +905,8 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     cout << endl;
 
     // Cadets information header
-    cout << setw(5) << left << "No." << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
-         << setw(16) << left << "Middle Name" << setw(12) << left << "Program" << setw(5) << left << "Status" << endl;
+    userTableHeader(role);
+    cout << setw(5) << left << "Status" << endl;
 
     for (int i = 0; i < numUser; i++)
     {
@@ -854,8 +915,8 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
         {
             // Display the users basic information
             counter++;
-            cout << setw(5) << left << to_string(counter) << setw(14) << left << (user + i)->lastName << setw(15) << left << (user + i)->sureName
-                 << setw(16) << left << (user + i)->middleName << setw(12) << left << (user + i)->program << setw(5) << left;
+            displayUser(user, i, counter);
+            cout << setw(5) << left;
             cin >> status;
 
             (user + i)->status[trainingDay - 1] = statusConverter(status);
@@ -875,11 +936,11 @@ void takeAttendance(User *user, int numUser, string staff)
 
     if (staff == "S1")
     {
-        choice = userMenu("Company Menu", "");
+        choice = userMenu("Company Menu");
         company = companyConverter(choice);
     }
 
-    choice = userMenu("Platoon Menu", "");
+    choice = userMenu("Platoon Menu");
     platoon = platoonConverter(choice);
 
     takeAttendance(user, numUser, company, platoon);
@@ -914,25 +975,25 @@ void loadAnnouncement(Announcement *announcement)
 // Function the display the announcement
 void displayAnnouncement(Announcement *announcement)
 {
-    string line = string(60, '-');
-    string boldLine = string(60, '=');
+    const int width = 50;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
 
     // Display the announcements
-    cout << boldLine << "\n";
-    cout << string(20, ' ') << "!! ANNOUNCEMENT !!\n";
-    cout << boldLine << "\n";
+    displayHeader("!! ANNOUNCEMENT !!", width);
+
     cout << left << setw(10) << "WHAT" << ": " << announcement->what << "\n";
     cout << left << setw(10) << "WHO" << ": " << announcement->who << "\n";
     cout << left << setw(10) << "WHERE" << ": " << announcement->where << "\n";
     cout << left << setw(10) << "WHEN" << ": " << announcement->when << "\n";
     cout << left << setw(10) << "ATTIRE" << ": " << announcement->attire << "\n";
-    cout << line << "\n";
+    cout << line2 << "\n";
     cout << "TO BRING:\n"
          << announcement->toBring;
-    cout << line << "\n";
+    cout << line2 << "\n";
     cout << "NOTE:\n"
          << announcement->note;
-    cout << boldLine << "\n";
+    cout << line1 << "\n";
 }
 
 // Function that can save the announcement
@@ -960,52 +1021,13 @@ void saveAnnouncement(Announcement *announcement)
     file.close();
 }
 
-// Function that display the header for listing based on role
-void userTableHeader(string role)
-{
-    // User information header
-    cout << setw(5) << left << "No.";
-
-    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
-    {
-        cout << setw(10) << left << "Rank";
-        if (role == "Staff Officer" || role == "Brigade Staff")
-        {
-            cout << setw(10) << left << "Staff";
-        }
-    }
-
-    cout << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
-         << setw(16) << left << "Middle Name" << setw(12) << left << "Program" << endl;
-}
-
-void displayUser(User *user, int index)
-{
-    // display user information
-
-    string role = (user + index)->role;
-
-    cout << setw(5) << left << to_string(index + 1);
-
-    if (role == "Advance Cadet" || role == "Staff Officer" || role == "Brigade Staff")
-    {
-        cout << setw(10) << left << (user + index)->rank;
-        if (role == "Staff Officer" || role == "Brigade Staff")
-        {
-            cout << setw(10) << left << (user + index)->staff;
-        }
-    }
-
-    cout << setw(14) << left << (user + index)->lastName << setw(15) << left << (user + index)->sureName
-         << setw(16) << left << (user + index)->middleName << setw(12) << left << (user + index)->program << endl;
-}
-
 // Helper function to list the users
 void list(User *user, int numUser)
 {
     for (int i = 0; i < numUser; i++)
     {
-        displayUser(user, i);
+        displayUser(user, i, i + 1);
+        cout << endl;
     }
 }
 
@@ -1027,18 +1049,22 @@ void listOfUsers()
 
     cout << "\nBasic Cadets" << endl;
     userTableHeader("Basic Cadet");
+    cout << endl;
     list(basicCadets, numCadets);
 
     cout << "\nAdvance Cadets" << endl;
     userTableHeader("Advance Cadet");
+    cout << endl;
     list(advanceCadets, numAdvanceCadets);
 
     cout << "\nStaff Officer" << endl;
     userTableHeader("Staff Officer");
+    cout << endl;
     list(staffOfficers, numOfficers);
 
     cout << "\nBrigade Staffs" << endl;
     userTableHeader("Brigade Staff");
+    cout << endl;
     list(brigadeStaffs, numBrigade);
 
     // Free Memory
@@ -1051,13 +1077,19 @@ void listOfUsers()
 // Overloading function for displaying user attendance based on brigade choice
 void attendanceSmartSearch(User *user, int numUser, string target, string type)
 {
+    int counter = 0;
     bool find = false;
     string secondTarget = "";
+    string role = (user + 0)->role;
 
     if (type == "Company Platoon")
     {
         companyPlatoonSelection(&target, &secondTarget);
     }
+
+    userTableHeader(role);
+    trainingDayHeader();
+    cout << endl;
 
     for (int i = 0; i < numUser; i++)
     {
@@ -1066,7 +1098,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->company == target)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1074,7 +1109,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->company == target && (user + i)->platoon == secondTarget)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1082,7 +1120,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->platoon == target)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1090,7 +1131,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->program == target)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1098,7 +1142,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->sureName == target)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1106,7 +1153,10 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->lastName == target)
             {
-                displayUser(user, i);
+                counter++;
+                displayUser(user, i, counter);
+                displayStatus(user, i);
+                cout << endl;
                 find = true;
             }
         }
@@ -1130,11 +1180,11 @@ void attendanceSmartSearch(User *user, int numUser)
     // Searh Menu
     if (role == "Basic Cadet")
     {
-        basicCadetChoice = userMenu("Basic Cadet Search Menu", "");
+        basicCadetChoice = userMenu("Basic Cadet Search Menu");
     }
     else if (role == "Advance Cadet")
     {
-        advanceCadetChoice = userMenu("Advance Cadet Search Menu", "");
+        advanceCadetChoice = userMenu("Advance Cadet Search Menu");
     }
 
     // Search by Company
@@ -1296,7 +1346,7 @@ void usersFeature(User *user, int index)
 
         while (running)
         {
-            choice = userMenu("Cadets Menu", (user + index)->userName);// Display the menu
+            choice = userMenu("Cadets Menu", (user + index)->userName); // Display the menu
 
             switch (choice)
             {
@@ -1315,6 +1365,7 @@ void usersFeature(User *user, int index)
             default:
                 break;
             }
+            pressEnter();
         }
     }
     else if (role == "Staff Officer")
@@ -1347,6 +1398,7 @@ void usersFeature(User *user, int index)
             default:
                 break;
             }
+            pressEnter();
         }
     }
     else if (role == "Brigade Staff")
@@ -1375,6 +1427,7 @@ void usersFeature(User *user, int index)
             default:
                 break;
             }
+            pressEnter();
         }
     }
 
@@ -1432,7 +1485,7 @@ int main()
         case 1: // Registration Section
 
             // Role Based Registration
-            role = userMenu("Role", ""); // Role Menu
+            role = userMenu("Role"); // Role Menu
 
             switch (role)
             {
@@ -1458,7 +1511,7 @@ int main()
         case 2: // Log In
 
             // Role Based Log In
-            role = userMenu("Role", ""); // Role Menu
+            role = userMenu("Role"); // Role Menu
 
             switch (role)
             {
