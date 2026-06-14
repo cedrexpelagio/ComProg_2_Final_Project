@@ -1072,8 +1072,8 @@ void listOfUsers()
     userTableHeader("Brigade Staff");
     cout << endl;
     list(brigadeStaffs, numBrigade);
-    cout << line1 << endl;
     cout << line2 << endl;
+    cout << line1 << endl;
 
     // Free Memory
     delete[] basicCadets;
@@ -1086,15 +1086,26 @@ void listOfUsers()
 void attendanceSmartSearch(User *user, int numUser, string target, string type)
 {
     int counter = 0;
+    int width = 122;
     bool find = false;
     string secondTarget = "";
     string role = (user + 0)->role;
+
+    if (role == "Advance Cadet")
+    {
+        width += 10;
+    }
+
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
 
     if (type == "Company Platoon")
     {
         companyPlatoonSelection(&target, &secondTarget);
     }
 
+    displayHeader("CADETS ATTENDANCE CHART", width);
+    cout << line2 << endl;
     userTableHeader(role);
     trainingDayHeader();
     cout << endl;
@@ -1172,8 +1183,11 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
 
     if (!find)
     {
-        cout << "\nNo User Found Match" << endl;
+        cout << "\n[!] No User Match\n"
+             << endl;
     }
+    cout << line2 << endl;
+    cout << line1 << endl;
 }
 
 // Overloading function to search attendance in different conditions
