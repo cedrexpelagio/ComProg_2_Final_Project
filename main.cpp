@@ -990,10 +990,28 @@ void listOfUsers()
     delete[] brigadeStaffs;
 }
 
+// Function for selecting company and platoon
+void companyPlatoonSelection(string *company, string *platoon)
+{
+    int choice = 0;
+
+    choice = userMenu("Company Menu");
+    *company = companyConverter(choice);
+
+    choice = userMenu("Platoon Menu");
+    *platoon = companyConverter(choice);
+}
+
 // Overloading function for displaying user attendance based on brigade choice
 void attendanceSmartSearch(User *user, int numUser, string target, string type)
 {
     bool find = false;
+    string secondTarget = "";
+
+    if (type == "Company Platoon")
+    {
+        companyPlatoonSelection(&target, &secondTarget);
+    }
 
     for (int i = 0; i < numUser; i++)
     {
@@ -1002,6 +1020,13 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         {
             if ((user + i)->company == target)
             {
+                displayUser(user, i);
+                find = true;
+            }
+        }
+        else if (type == "Company Platoon")
+        {
+            if ((user + i)->company == target && (user + i)->company == secondTarget){
                 displayUser(user, i);
                 find = true;
             }
@@ -1040,8 +1065,9 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         }
     }
 
-    if (!find){
-    cout << "\nNo User Found Match" << endl;
+    if (!find)
+    {
+        cout << "\nNo User Found Match" << endl;
     }
 }
 
@@ -1054,7 +1080,7 @@ void attendanceSmartSearch(User *user, int numUser)
     int advanceCadetChoice = 0;
     string target = "";
 
-    // Searh Menu 
+    // Searh Menu
     if (role == "Basic Cadet")
     {
         basicCadetChoice = userMenu("Basic Cadet Search Menu");
@@ -1075,9 +1101,16 @@ void attendanceSmartSearch(User *user, int numUser)
     // Search by Platoon
     else if (basicCadetChoice == 2 || advanceCadetChoice == 1)
     {
-        choice = userMenu("Platoon Menu");
-        target = platoonConverter(choice);
-        attendanceSmartSearch(user, numUser, target, "Platoon");
+        if (basicCadetChoice == 2)
+        {
+            attendanceSmartSearch(user, numUser, target, "Company Platoon");
+        }
+        else if (advanceCadetChoice == 1)
+        {
+            choice = userMenu("Platoon Menu");
+            target = platoonConverter(choice);
+            attendanceSmartSearch(user, numUser, target, "Platoon");
+        }
     }
     // Search by Program
     else if (basicCadetChoice == 3 || advanceCadetChoice == 2)
