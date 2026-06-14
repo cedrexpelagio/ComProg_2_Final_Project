@@ -57,10 +57,9 @@ void clearScreen()
 }
 
 // Displays a centered title with border
-void displayHeader(string title)
+void displayHeader(string title, int borderWidth)
 {
     clearScreen();
-    int borderWidth = 33;                         // Total width of the border
     int titleLength = title.length();             // Length of the title text
     int spaces = (borderWidth - titleLength) / 2; // Spaces needed to center title
 
@@ -69,118 +68,165 @@ void displayHeader(string title)
     cout << string(borderWidth, '=') << "\n";
 }
 
-// Function that display the user menu
-void displayUserMenu(string typeMenu)
+void pressEnter()
 {
-    // displayHeader("UnitSync");
+    cout << "\nPress Enter to Continue...";
+    cin.get();
+    cin.ignore();
+}
+
+// Function that display the user menu
+void displayUserMenu(string typeMenu, string userName = "")
+{
+    int width = 40;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
+
     if (typeMenu == "Main")
     {
-        cout << "Menu:\n";
-        cout << "1. Register\n";
-        cout << "2. Log In\n";
-        cout << "3. Exit\n";
+        displayHeader("UnitSync", width);
+        cout << line2 << "\n";
+        cout << " MAIN MENU\n";
+        cout << line2 << "\n";
+        cout << " 1. Register\n";
+        cout << " 2. Log In\n";
+        cout << " 3. Exit\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Role")
     {
-        cout << "Select Role:\n";
-        cout << "1. Basic Cadet\n";
-        cout << "2. Advance Cadet\n";
-        cout << "3. Staff Officer\n";
-        cout << "4. Brigade Staff\n";
+        displayHeader("UnitSync", width);
+        cout << line2 << "\n";
+        cout << " ROLE SELECTION\n";
+        cout << line2 << "\n";
+        cout << " 1. Basic Cadet\n";
+        cout << " 2. Advance Cadet\n";
+        cout << " 3. Staff Officer\n";
+        cout << " 4. Brigade Staff\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Cadets Menu")
     {
-        cout << "Menu\n";
-        cout << "1. View My Profile\n";
-        cout << "2. Announcements\n";
-        cout << "3. View My Attendance\n";
-        cout << "4. Log Out\n";
+        displayHeader("UnitSync", width);
+        cout << line2 << "\n";
+        cout << " User: " << userName << "\n";
+        cout << line2 << "\n";
+        cout << " 1. View My Profile\n";
+        cout << " 2. Announcements\n";
+        cout << " 3. View My Attendance\n";
+        cout << " 4. Log Out\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Staff Officer Menu")
     {
-        cout << "Menu\n";
-        cout << "1. View My Profile\n";
-        cout << "2. Take Attendance\n";
-        cout << "3. Announcements\n";
-        cout << "4. Log Out\n";
+        displayHeader("UnitSync", width);
+        cout << line2 << "\n";
+        cout << " User: " << userName << "\n";
+        cout << line2 << "\n";
+        cout << " 1. View My Profile\n";
+        cout << " 2. Take Attendance\n";
+        cout << " 3. Announcements\n";
+        cout << " 4. Log Out\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Brigade Staff Menu")
     {
-        cout << "Menu\n";
-        cout << "1. View My Profile\n";
-        cout << "2. Create an Announcement\n";
-        cout << "3. List of Users\n";
-        cout << "4. Attendance Smart Search\n";
-        cout << "5. Log Out\n";
+        displayHeader("UnitSync", width);
+        cout << line2 << "\n";
+        cout << " User: " << userName << "\n";
+        cout << line2 << "\n";
+        cout << " 1. View My Profile\n";
+        cout << " 2. Create an Announcement\n";
+        cout << " 3. List of Users\n";
+        cout << " 4. Attendance Smart Search\n";
+        cout << " 5. Log Out\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Company Menu")
     {
-        cout << "Company\n";
-        cout << "1. Alpha\n";
-        cout << "2. Bravo\n";
-        cout << "3. Charlie\n";
-        cout << "4. Delta\n";
+        displayHeader("Company Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. Alpha\n";
+        cout << " 2. Bravo\n";
+        cout << " 3. Charlie\n";
+        cout << " 4. Delta\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Platoon Menu")
     {
-        cout << "Platoon\n";
-        cout << "1. 1st Platoon\n";
-        cout << "2. 2nd Platoon\n";
-        cout << "3. 3rd Platoon\n";
-        cout << "4. 4th Platoon\n";
+        displayHeader("Platoon Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. 1st Platoon\n";
+        cout << " 2. 2nd Platoon\n";
+        cout << " 3. 3rd Platoon\n";
+        cout << " 4. 4th Platoon\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Staff Menu")
     {
-        cout << "Staff\n";
-        cout << "1. S1\n";
-        cout << "2. S3\n";
+        displayHeader("Staff Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. S1\n";
+        cout << " 2. S3\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Status Menu")
     {
-        cout << "Status\n";
-        cout << "[1] Present    ";
+        cout << line2 << "\n";
+        cout << " STATUS SELECTION\n";
+        cout << line2 << "\n";
+        cout << " [1] Present    ";
         cout << "[2] Late     ";
         cout << "[3] Excuse     ";
-        cout << "[4] Absent     \n";
+        cout << "[4] Absent\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Role Smart Search")
     {
-        cout << "Search:\n";
-        cout << "1. Basic Cadets\n";
-        cout << "2. Advance Cadets\n";
+        displayHeader("Search Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. Basic Cadets\n";
+        cout << " 2. Advance Cadets\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Search By Name Menu")
     {
-        cout << "Search by:\n";
-        cout << "1. Last Name\n";
-        cout << "2. Sure Name\n";
+        displayHeader("Search Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. Last Name\n";
+        cout << " 2. Sure Name\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Basic Cadet Search Menu")
     {
-        cout << "Search by:\n";
-        cout << "1. Company\n";
-        cout << "2. Platoon\n";
-        cout << "3. Program\n";
-        cout << "4. Name\n";
+        displayHeader("Search Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. Company\n";
+        cout << " 2. Platoon\n";
+        cout << " 3. Program\n";
+        cout << " 4. Name\n";
+        cout << line1 << "\n";
     }
     else if (typeMenu == "Advance Cadet Search Menu")
     {
-        cout << "Search by:\n";
-        cout << "1. Platoon\n";
-        cout << "2. Program\n";
-        cout << "3. Name\n";
+        displayHeader("Search Selection", width);
+        cout << line2 << "\n";
+        cout << " 1. Platoon\n";
+        cout << " 2. Program\n";
+        cout << " 3. Name\n";
+        cout << line1 << "\n";
     }
 }
 
 // Function that returns the user choice in the main menu
-int userMenu(string typeMenu)
+int userMenu(string typeMenu, string userName = "")
 {
     int choice = 0;
-    displayUserMenu(typeMenu); // display the menu
-    cout << "Enter Choice: ";
+    displayUserMenu(typeMenu, userName);
+    cout << "\n Enter Choice: ";
     cin >> choice;
-
-    return choice; // return the choice
+    pressEnter();
+    return choice;
 }
 
 // Function that converter user role based on role option
@@ -268,10 +314,10 @@ void selectUnit(User *basicCadets, int index)
 {
     int choice = 0; // Store the users choice
 
-    choice = userMenu("Company Menu");
+    choice = userMenu("Company Menu", "");
     (basicCadets + index)->company = companyConverter(choice);
 
-    choice = userMenu("Platoon Menu");
+    choice = userMenu("Platoon Menu", "");
     (basicCadets + index)->platoon = platoonConverter(choice);
 }
 
@@ -280,10 +326,10 @@ void companyPlatoonSelection(string *company, string *platoon)
 {
     int choice = 0;
 
-    choice = userMenu("Company Menu");
+    choice = userMenu("Company Menu", "");
     *company = companyConverter(choice);
 
-    choice = userMenu("Platoon Menu");
+    choice = userMenu("Platoon Menu", "");
     *platoon = platoonConverter(choice);
 }
 
@@ -524,7 +570,7 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     else if (role == "Advance Cadet")
     {
         // Select Platoon
-        platoon = userMenu("Platoon Menu");
+        platoon = userMenu("Platoon Menu", "");
         (user + *index)->platoon = platoonConverter(platoon);
 
         cin.ignore();
@@ -794,7 +840,7 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
         fileName = FILE_ADVANCE; // Advance Cadet File
     }
 
-    displayUserMenu("Status Menu");
+    displayUserMenu("Status Menu", "");
     cout << endl;
 
     // Cadets information header
@@ -829,11 +875,11 @@ void takeAttendance(User *user, int numUser, string staff)
 
     if (staff == "S1")
     {
-        choice = userMenu("Company Menu");
+        choice = userMenu("Company Menu", "");
         company = companyConverter(choice);
     }
 
-    choice = userMenu("Platoon Menu");
+    choice = userMenu("Platoon Menu", "");
     platoon = platoonConverter(choice);
 
     takeAttendance(user, numUser, company, platoon);
@@ -1026,7 +1072,8 @@ void attendanceSmartSearch(User *user, int numUser, string target, string type)
         }
         else if (type == "Company Platoon")
         {
-            if ((user + i)->company == target && (user + i)->company == secondTarget){
+            if ((user + i)->company == target && (user + i)->platoon == secondTarget)
+            {
                 displayUser(user, i);
                 find = true;
             }
@@ -1083,17 +1130,17 @@ void attendanceSmartSearch(User *user, int numUser)
     // Searh Menu
     if (role == "Basic Cadet")
     {
-        basicCadetChoice = userMenu("Basic Cadet Search Menu");
+        basicCadetChoice = userMenu("Basic Cadet Search Menu", "");
     }
     else if (role == "Advance Cadet")
     {
-        advanceCadetChoice = userMenu("Advance Cadet Search Menu");
+        advanceCadetChoice = userMenu("Advance Cadet Search Menu", "");
     }
 
     // Search by Company
     if (basicCadetChoice == 1)
     {
-        choice = userMenu("Company Menu");
+        choice = userMenu("Company Menu", "");
         target = companyConverter(choice);
 
         attendanceSmartSearch(user, numUser, target, "Company");
@@ -1107,7 +1154,7 @@ void attendanceSmartSearch(User *user, int numUser)
         }
         else if (advanceCadetChoice == 1)
         {
-            choice = userMenu("Platoon Menu");
+            choice = userMenu("Platoon Menu", "");
             target = platoonConverter(choice);
             attendanceSmartSearch(user, numUser, target, "Platoon");
         }
@@ -1123,7 +1170,7 @@ void attendanceSmartSearch(User *user, int numUser)
     // Search by Name
     else if (basicCadetChoice == 4 || advanceCadetChoice == 3)
     {
-        choice = userMenu("Search By Name Menu");
+        choice = userMenu("Search By Name Menu", "");
         cin.ignore();
         if (choice == 1)
         {
@@ -1152,7 +1199,7 @@ void attendanceSmartSearch()
     int numCadets = loadUser(basicCadets, FILE_BASIC);
     int numAdvanceCadets = loadUser(advanceCadets, FILE_ADVANCE);
 
-    choice = userMenu("Role Smart Search");
+    choice = userMenu("Role Smart Search", "");
 
     switch (choice)
     {
@@ -1249,7 +1296,7 @@ void usersFeature(User *user, int index)
 
         while (running)
         {
-            choice = userMenu("Cadets Menu"); // Display the menu
+            choice = userMenu("Cadets Menu", (user + index)->userName);// Display the menu
 
             switch (choice)
             {
@@ -1274,7 +1321,7 @@ void usersFeature(User *user, int index)
     {
         while (running)
         {
-            choice = userMenu("Staff Officer Menu"); // Display the menu
+            choice = userMenu("Staff Officer Menu", (user + index)->userName); // Display the menu
 
             switch (choice)
             {
@@ -1306,7 +1353,7 @@ void usersFeature(User *user, int index)
     {
         while (running)
         {
-            choice = userMenu("Brigade Staff Menu"); // Display the menu
+            choice = userMenu("Brigade Staff Menu", (user + index)->userName); // Display the menu
 
             switch (choice)
             {
@@ -1385,7 +1432,7 @@ int main()
         case 1: // Registration Section
 
             // Role Based Registration
-            role = userMenu("Role"); // Role Menu
+            role = userMenu("Role", ""); // Role Menu
 
             switch (role)
             {
@@ -1411,7 +1458,7 @@ int main()
         case 2: // Log In
 
             // Role Based Log In
-            role = userMenu("Role"); // Role Menu
+            role = userMenu("Role", ""); // Role Menu
 
             switch (role)
             {
