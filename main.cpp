@@ -275,6 +275,18 @@ void selectUnit(User *basicCadets, int index)
     (basicCadets + index)->platoon = platoonConverter(choice);
 }
 
+// Function for selecting company and platoon
+void companyPlatoonSelection(string *company, string *platoon)
+{
+    int choice = 0;
+
+    choice = userMenu("Company Menu");
+    *company = companyConverter(choice);
+
+    choice = userMenu("Platoon Menu");
+    *platoon = platoonConverter(choice);
+}
+
 // Function to register user student information
 // This is a required for every type of user
 void registerUser(User *user, int index)
@@ -988,18 +1000,6 @@ void listOfUsers()
     delete[] advanceCadets;
     delete[] staffOfficers;
     delete[] brigadeStaffs;
-}
-
-// Function for selecting company and platoon
-void companyPlatoonSelection(string *company, string *platoon)
-{
-    int choice = 0;
-
-    choice = userMenu("Company Menu");
-    *company = companyConverter(choice);
-
-    choice = userMenu("Platoon Menu");
-    *platoon = companyConverter(choice);
 }
 
 // Overloading function for displaying user attendance based on brigade choice
