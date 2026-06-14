@@ -766,7 +766,7 @@ void userTableHeader(string role)
         }
     }
 
-    cout << setw(14) << left << "Last Name" << setw(15) << left << "First Name"
+    cout << setw(14) << left << "Last Name" << setw(15) << left << "Sure Name"
          << setw(16) << left << "Middle Name" << setw(12) << left << "Program";
 }
 
@@ -1035,6 +1035,10 @@ void list(User *user, int numUser)
 // WIP: UI will be improve later
 void listOfUsers()
 {
+    const int width = 80;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
+
     // Load all users
     User *basicCadets = new User[MAX_USER];
     User *advanceCadets = new User[MAX_USER];
@@ -1047,25 +1051,29 @@ void listOfUsers()
     int numOfficers = loadUser(staffOfficers, FILE_OFFICER);
     int numBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
 
-    cout << "\nBasic Cadets" << endl;
+    displayHeader("USER'S INFORMATION CHART", width);
+
+    displaySubHeader("BASIC CADETS", width);
     userTableHeader("Basic Cadet");
     cout << endl;
     list(basicCadets, numCadets);
 
-    cout << "\nAdvance Cadets" << endl;
+    displaySubHeader("ADVANCE CADETS", width);
     userTableHeader("Advance Cadet");
     cout << endl;
     list(advanceCadets, numAdvanceCadets);
 
-    cout << "\nStaff Officer" << endl;
+    displaySubHeader("STAFF OFFICERS", width);
     userTableHeader("Staff Officer");
     cout << endl;
     list(staffOfficers, numOfficers);
 
-    cout << "\nBrigade Staffs" << endl;
+    displaySubHeader("BRIGADE STAFFS", width);
     userTableHeader("Brigade Staff");
     cout << endl;
     list(brigadeStaffs, numBrigade);
+    cout << line1 << endl;
+    cout << line2 << endl;
 
     // Free Memory
     delete[] basicCadets;
