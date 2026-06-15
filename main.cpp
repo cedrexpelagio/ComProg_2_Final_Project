@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <limits>
 
 using namespace std;
 // UnitSync
@@ -85,7 +86,7 @@ void pressEnter()
 }
 
 // Function that display the user menu
-void displayUserMenu(string typeMenu, string userName = "")
+void displayUserMenu(string typeMenu, string userName = "", int *size = 0)
 {
     int width = 40;
     string line1 = string(width, '=');
@@ -93,12 +94,16 @@ void displayUserMenu(string typeMenu, string userName = "")
 
     if (typeMenu == "Main")
     {
-        displayHeader("UnitSync", width);
-        displaySubHeader("MAIN MENU", width);
+        displayHeader("UnitSync", width);     // Display header and clear the screen
+        displaySubHeader("MAIN MENU", width); // Display sub heaader
+        // Display the menu choices
         cout << " 1. Register\n";
         cout << " 2. Log In\n";
         cout << " 3. Exit\n";
+        // Display a line for cleaner UI
         cout << line1 << "\n";
+
+        *size = 3; // Modify the size for error handling
     }
     else if (typeMenu == "Role")
     {
@@ -109,6 +114,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. Staff Officer\n";
         cout << " 4. Brigade Staff\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Cadets Menu")
     {
@@ -119,6 +126,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. View My Attendance\n";
         cout << " 4. Log Out\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Staff Officer Menu")
     {
@@ -129,6 +138,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. Announcements\n";
         cout << " 4. Log Out\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Brigade Staff Menu")
     {
@@ -140,6 +151,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 4. Attendance Smart Search\n";
         cout << " 5. Log Out\n";
         cout << line1 << "\n";
+
+        *size = 5;
     }
     else if (typeMenu == "Company Menu")
     {
@@ -150,6 +163,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. Charlie\n";
         cout << " 4. Delta\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Platoon Menu")
     {
@@ -160,6 +175,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. 3rd Platoon\n";
         cout << " 4. 4th Platoon\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Staff Menu")
     {
@@ -168,6 +185,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 1. S1\n";
         cout << " 2. S3\n";
         cout << line1 << "\n";
+
+        *size = 2;
     }
     else if (typeMenu == "Status Menu")
     {
@@ -187,6 +206,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 1. Basic Cadets\n";
         cout << " 2. Advance Cadets\n";
         cout << line1 << "\n";
+
+        *size = 2;
     }
     else if (typeMenu == "Search By Name Menu")
     {
@@ -195,6 +216,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 1. Last Name\n";
         cout << " 2. Sure Name\n";
         cout << line1 << "\n";
+
+        *size = 2;
     }
     else if (typeMenu == "Basic Cadet Search Menu")
     {
@@ -205,6 +228,8 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 3. Program\n";
         cout << " 4. Name\n";
         cout << line1 << "\n";
+
+        *size = 4;
     }
     else if (typeMenu == "Advance Cadet Search Menu")
     {
@@ -214,17 +239,63 @@ void displayUserMenu(string typeMenu, string userName = "")
         cout << " 2. Program\n";
         cout << " 3. Name\n";
         cout << line1 << "\n";
+
+        *size = 3;
     }
 }
 
-// Function that returns the user choice in the main menu
+// OVerload 1: function to verify the user input
+bool verifyInput(int size, int choice)
+{
+    return (choice >= 1 && choice <= size);
+}
+
+// Overload 2: function to handle non interger input
+void verifyInput(int size, int *choice, bool *verify)
+{
+    // Vefiry if the choice is an interger
+    if (cin >> *choice) 
+    {
+        // Handle range of integer input
+        *verify = verifyInput(size, *choice);
+
+        if (!*verify)
+        {
+            cout << "\n[!] Invalid Input. Enter 1-" << size << " Only\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+
+    }
+    else
+    {
+        // Handle non-integer input
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "\n[!] Please enter a number.\n";
+        
+        *verify = false;
+    }
+}
+
+// Function that verify the choice before returning the value
 int userMenu(string typeMenu, string userName = "")
 {
     int choice = 0;
-    displayUserMenu(typeMenu, userName);
-    cout << "\n Enter Choice: ";
-    cin >> choice;
-    pressEnter();
+    int size = 0;
+    bool verify = false;
+
+    do
+    {
+        displayUserMenu(typeMenu, userName, &size);
+        cout << "\n Enter Choice: ";
+
+        verifyInput(size, &choice, &verify);
+
+            pressEnter();
+
+    } while (!verify);
+
     return choice;
 }
 
