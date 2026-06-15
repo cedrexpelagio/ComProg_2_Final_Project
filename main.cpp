@@ -1197,7 +1197,10 @@ void attendanceSmartSearch(User *user, int numUser)
     int choice = 0;
     int basicCadetChoice = 0;
     int advanceCadetChoice = 0;
+    const int width = 40;
     string target = "";
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
 
     // Searh Menu
     if (role == "Basic Cadet")
@@ -1212,7 +1215,7 @@ void attendanceSmartSearch(User *user, int numUser)
     // Search by Company
     if (basicCadetChoice == 1)
     {
-        choice = userMenu("Company Menu", "");
+        choice = userMenu("Company Menu");
         target = companyConverter(choice);
 
         attendanceSmartSearch(user, numUser, target, "Company");
@@ -1226,7 +1229,7 @@ void attendanceSmartSearch(User *user, int numUser)
         }
         else if (advanceCadetChoice == 1)
         {
-            choice = userMenu("Platoon Menu", "");
+            choice = userMenu("Platoon Menu");
             target = platoonConverter(choice);
             attendanceSmartSearch(user, numUser, target, "Platoon");
         }
@@ -1234,26 +1237,39 @@ void attendanceSmartSearch(User *user, int numUser)
     // Search by Program
     else if (basicCadetChoice == 3 || advanceCadetChoice == 2)
     {
-        cin.ignore();
+        displayHeader("Program Search", width);
+        cout << line2 << endl;
         cout << "Enter Program: ";
         getline(cin, target);
+        cout << line2 << endl;
+        cout << line1 << endl;
+        pressEnter();
         attendanceSmartSearch(user, numUser, target, "Program");
     }
     // Search by Name
     else if (basicCadetChoice == 4 || advanceCadetChoice == 3)
     {
-        choice = userMenu("Search By Name Menu", "");
-        cin.ignore();
+        choice = userMenu("Search By Name Menu");
         if (choice == 1)
         {
+            displayHeader("Last Name Search", width);
+            cout << line2 << endl;
             cout << "Enter Last Name: ";
             getline(cin, target);
+            cout << line2 << endl;
+            cout << line1 << endl;
+            pressEnter();
             attendanceSmartSearch(user, numUser, target, "Last Name");
         }
         else if (choice == 2)
         {
+            displayHeader("Sure Name Search", width);
+            cout << line2 << endl;
             cout << "Enter Sure Name: ";
             getline(cin, target);
+            cout << line2 << endl;
+            cout << line1 << endl;
+            pressEnter();
             attendanceSmartSearch(user, numUser, target, "Sure Name");
         }
     }
