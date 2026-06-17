@@ -82,8 +82,7 @@ void displayHeader(string title, int borderWidth)
 void pressEnter()
 {
     cout << "\nPress Enter to Continue...";
-    cin.get();
-    cin.ignore();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 // Function that display the user menu
@@ -714,24 +713,57 @@ bool verifyPassword(User *user, string password, int index)
     }
 }
 
-// Function for user log in
-void userLogIn(User *user, int numUser, int *index)
+bool errorTracker(int *numError)
 {
+    const int width = 40;
+    (*numError)++;
+
+    if (*numError == 3)
+    {
+        displayHeader("UnitSync", width);
+        displaySubHeader("LOG IN", width);
+        cout << "\n [!] Too many failed attempts.\n Please try again later.\n";
+        cout << string(width, '=') << endl;
+        pressEnter();
+        *numError = 0;
+        return true; // signal to stop trying
+    }
+
+    return false; // signal to keep trying
+}
+
+// Function for user log in - returns true if successful, false if too many attempts
+bool userLogIn(User *user, int numUser, int *index)
+{
+    int numError = 0;
     string userName = "";
     string password = "";
     bool verification = false;
+    bool tryAgain = false;
     const int width = 40;
 
+    // Username validation
     do
     {
         displayHeader("UnitSync", width);
         displaySubHeader("LOG IN", width);
         cout << "User Name: ";
         getline(cin, userName);
-        // Verify the user name
         verification = verifyUserName(user, userName, numUser, index);
-    } while (!verification); // Loop if the user do not exist
 
+        if (!verification)
+        {
+            tryAgain = errorTracker(&numError);
+            if (tryAgain)
+            {
+                return false; // Too many username attempts - exit
+            }
+        }
+    } while (!verification);
+
+    numError = 0; // reset counter for password attempts
+
+    // Password validation
     do
     {
         displayHeader("UnitSync", width);
@@ -739,12 +771,23 @@ void userLogIn(User *user, int numUser, int *index)
         cout << "User Name: " << (user + *index)->userName;
         cout << "\nPassword : ";
         cin >> password;
-        // Verify the password
         verification = verifyPassword(user, password, *index);
-    } while (!verification); // Loop if the password is incorrect
-    cout << " [/] Log In Successfully" << endl;
+
+        if (!verification)
+        {
+            tryAgain = errorTracker(&numError);
+            if (tryAgain)
+            {
+                return false; // Too many password attempts - exit
+            }
+        }
+    } while (!verification);
+
+    cout << "\n [/] Log In Successfully\n";
     cout << string(width, '=') << endl;
     pressEnter();
+
+    return true; // Login successful
 }
 
 // Function for the user's to view their profile
@@ -1211,6 +1254,13 @@ void listOfUsers()
     cout << line2 << endl;
     cout << line1 << endl;
 
+    cout << line2 << endl;
+    cout << left << setw(25) << " Total Basic Cadets" << ": " << numCadets << "\n";
+    cout << left << setw(25) << " Total Advance Cadets" << ": " << numAdvanceCadets << "\n";
+    cout << left << setw(25) << " Total Staff Officers" << ": " << numOfficers << "\n";
+    cout << left << setw(25) << " Total Brigade Staffs" << ": " << numBrigade << "\n";
+    cout << line1 << endl;
+
     // Free Memory
     delete[] basicCadets;
     delete[] advanceCadets;
@@ -1617,10 +1667,11 @@ void usersFeature(User *user, int index)
 
 int main()
 {
-    int option = 0;      // Store the user's option
-    int role = 0;        // Store the user's role
-    int userIndex = 0;   // Store the user's index in logging in
-    bool running = true; // Condition to keep the system running
+    int option = 0;            // Store the user's option
+    int role = 0;              // Store the user's role
+    int userIndex = 0;         // Store the user's index in logging in
+    bool running = true;       // Condition to keep the system running
+    bool loginSuccess = false; // Track if login was successful
 
     // Basic Cadets Main Variables
     int numCadets = 0;                      // total number of basic cadets registered
@@ -1661,7 +1712,6 @@ int main()
         switch (option)
         {
         case 1: // Registration Section
-
             // Role Based Registration
             role = userMenu("Role"); // Role Menu
 
@@ -1684,34 +1734,45 @@ int main()
                 registerUser(brigadeStaffs, &lastBrigade, &numBrigades, FILE_BRIGADE);
                 break;
             }
-
             break;
-        case 2: // Log In
 
+        case 2: // Log In Section
             // Role Based Log In
             role = userMenu("Role"); // Role Menu
 
             switch (role)
             {
             case 1: // Basic Cadets
-                userLogIn(basicCadets, numCadets, &userIndex);
-                usersFeature(basicCadets, userIndex);
+                loginSuccess = userLogIn(basicCadets, numCadets, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(basicCadets, userIndex);
+                }
                 break;
             case 2: // Advance Cadets
-                userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
-                usersFeature(advanceCadets, userIndex);
+                loginSuccess = userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(advanceCadets, userIndex);
+                }
                 break;
             case 3: // Staff Officers
-                userLogIn(staffOfficers, numOfficers, &userIndex);
-                usersFeature(staffOfficers, userIndex);
+                loginSuccess = userLogIn(staffOfficers, numOfficers, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(staffOfficers, userIndex);
+                }
                 break;
             case 4: // Brigade Staff
-                userLogIn(brigadeStaffs, numBrigades, &userIndex);
-                usersFeature(brigadeStaffs, userIndex);
+                loginSuccess = userLogIn(brigadeStaffs, numBrigades, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(brigadeStaffs, userIndex);
+                }
                 break;
             }
-
             break;
+
         case 3:              // Exit
             running = false; // Stop the system from looping
             cout << "\nThank you for using UnitSync!\n";
