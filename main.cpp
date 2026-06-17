@@ -438,8 +438,9 @@ string spaceRemover(string text)
     string result = "";
     for (char c : text)
     {
-        if (c != ' ')
+        if (c != ' '){
             result += c;
+        }
     }
     return result;
 }
@@ -478,6 +479,31 @@ string generatePassword(User *user, int index)
     password = lastName + "-" + idNumber + "-" + userIndex;
 
     return password;
+}
+
+template <typename T>
+void swapUser(T &a, T &b)
+{
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+// Sort users alphabetically by last name (A-Z)
+void sortUsersAlphabetically(User *user, int numUser)
+{
+    for (int i = 0; i < numUser - 1; i++)
+    {
+        for (int j = 0; j < numUser - i - 1; j++)
+        {
+            // Direct comparison (case sensitive)
+            if ((user + j)->lastName > (user + j + 1)->lastName)
+            {
+                // Dereference the pointers to pass by reference
+                swapUser(*(user + j), *(user + j + 1));
+            }
+        }
+    }
 }
 
 // Function to write data in files, serve as the helper function for save user and update file function
@@ -667,14 +693,17 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
 
     saveUser(user, *index, fileName);
 
+    (*index)++;
+    (*numberOfUser)++;
+
+    sortUsersAlphabetically(user, *numberOfUser);
+    updateFile(user, *numberOfUser, fileName);
+
     cout << line1 << endl;
     cout << " [/] Registration Complete!\n";
     cout << line1 << endl;
 
     pressEnter();
-
-    (*index)++;
-    (*numberOfUser)++;
 }
 
 // Function that verify the user name
@@ -771,6 +800,7 @@ bool userLogIn(User *user, int numUser, int *index)
         cout << "User Name: " << (user + *index)->userName;
         cout << "\nPassword : ";
         cin >> password;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         verification = verifyPassword(user, password, *index);
 
         if (!verification)
@@ -1503,7 +1533,7 @@ void createAnnouncement()
     displayHeader("CREATE ANNOUNCEMENT", width);
     displaySubHeader("ANNOUNCEMENT DETAILS", width);
 
-    cin.ignore();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << "WHAT: ";
     getline(cin, announcement->what);
     cout << "WHO: ";
