@@ -692,6 +692,8 @@ bool verifyUserName(User *user, string userName, int numUser, int *index)
     }
 
     cout << " [!] No Name Found\n";
+    cout << string(40, '=') << endl;
+    pressEnter();
     return false; // return if the user name is not found
 }
 
@@ -706,6 +708,8 @@ bool verifyPassword(User *user, string password, int index)
     else
     {
         cout << " [!] Password Incorrect\n";
+        cout << string(40, '=') << endl;
+        pressEnter();
         return false; // return if the password is incorrect
     }
 }
@@ -718,11 +722,10 @@ void userLogIn(User *user, int numUser, int *index)
     bool verification = false;
     const int width = 40;
 
-    displayHeader("UnitSync", width);
-    displaySubHeader("LOG IN", width);
-
     do
     {
+        displayHeader("UnitSync", width);
+        displaySubHeader("LOG IN", width);
         cout << "User Name: ";
         getline(cin, userName);
         // Verify the user name
@@ -731,11 +734,17 @@ void userLogIn(User *user, int numUser, int *index)
 
     do
     {
-        cout << "Password : ";
+        displayHeader("UnitSync", width);
+        displaySubHeader("LOG IN", width);
+        cout << "User Name: " << (user + *index)->userName;
+        cout << "\nPassword : ";
         cin >> password;
         // Verify the password
         verification = verifyPassword(user, password, *index);
     } while (!verification); // Loop if the password is incorrect
+    cout << " [/] Log In Successfully" << endl;
+    cout << string(width, '=') << endl;
+    pressEnter();
 }
 
 // Function for the user's to view their profile
@@ -973,12 +982,12 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
         displaySubHeader("Enter Training Day (1-15)", width);
         cout << " Training Day: ";
         verifyInput(15, &trainingDay, &verify);
-        
+
         if (!verify)
         {
             pressEnter();
         }
-        
+
     } while (!verify);
 
     if (role == "Basic Cadet")
@@ -1006,17 +1015,17 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     {
         if ((user + i)->company == company && (user + i)->platoon == platoon)
         {
-            
+
             do
             {
                 // Display the users basic information
                 counter++;
                 displayUser(user, i, counter);
                 cout << setw(5) << left;
-                
+
                 // Use verifyInput for status validation (1-4 range)
                 verifyInput(4, &status, &statusValid);
-                
+
                 if (!statusValid)
                 {
                     // Decrement counter to re-display the same user
@@ -1024,7 +1033,7 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
                     cout << line2 << endl;
                     cout << line1 << endl;
                     pressEnter();
-                    
+
                     // Redisplay the header and user list from the start
                     displayHeader("TAKE ATTENDANCE", doubleWidth);
                     displaySubHeader("TRAINING DAY: " + to_string(trainingDay), doubleWidth);
@@ -1041,13 +1050,13 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
                     // Valid status - save it
                     (user + i)->status[trainingDay - 1] = statusConverter(status);
                 }
-                
+
             } while (!statusValid);
         }
     }
 
     cout << line2 << endl;
-    cout << line1 << endl;       
+    cout << line1 << endl;
 
     updateFile(user, numUser, fileName);
 }
