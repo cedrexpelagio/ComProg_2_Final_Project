@@ -1,0 +1,7 @@
+2bd,ALL,PUP,0500H,TYPE D,[/] Lunch
+[/] Type C
+[/] Blue Ballpen
+,[/] MALE:
+[/] 3 by 0 haircut
+[/] no facial hair
+,

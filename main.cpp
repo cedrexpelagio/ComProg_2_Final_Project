@@ -8,7 +8,7 @@
 using namespace std;
 // UnitSync
 
-const int MAX_USER = 100;
+const int MAX_USER = 500;
 const int NUM_TRAINING_DAY = 15;
 
 // User files
@@ -21,11 +21,11 @@ const string FILE_ANNOUNCE = "announcement.txt";
 
 // 2D array for all conversions
 const string CONVERT_TABLE[5][4] = {
-    {"Basic Cadet", "Advance Cadet", "Staff Officer", "Brigade Staff"},  // Role (row 0)
-    {"Alpha", "Bravo", "Charlie", "Delta"},                              // Company (row 1)
-    {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"},        // Platoon (row 2)
-    {"S1", "S3", "", ""},                                                // Staff (row 3)
-    {"Present", "Late", "Excuse", "Absent"}                              // Status (row 4)
+    {"Basic Cadet", "Advance Cadet", "Staff Officer", "Brigade Staff"}, // Role (row 0)
+    {"Alpha", "Bravo", "Charlie", "Delta"},                             // Company (row 1)
+    {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"},       // Platoon (row 2)
+    {"S1", "S3", "", ""},                                               // Staff (row 3)
+    {"Present", "Late", "Excuse", "Absent"}                             // Status (row 4)
 };
 
 // Struct for User's data
@@ -61,6 +61,186 @@ struct Announcement
     string note = "";
 };
 
+void clearScreen();
+void displaySubHeader(string title, int width);
+void displayHeader(string title, int borderWidth);
+void pressEnter();
+void displayUserMenu(string typeMenu, string userName = "", int *size = 0);
+bool verifyInput(int size, int choice);
+void verifyInput(int size, int *choice, bool *verify);
+int userMenu(string typeMenu, string userName = "");
+void displayLogout(string userName);
+string companyConverter(int company);
+string platoonConverter(int platoon);
+string staffConverter(int staff);
+string statusConverter(int status);
+void roleConverter(User *user, int role, int index);
+void selectUnit(User *basicCadets, int index);
+void companyPlatoonSelection(string *company, string *platoon);
+void registerUser(User *user, int index);
+void registerRank(User *user, int index);
+void registerStaff(User *user, int index);
+string spaceRemover(string text);
+string generateUserName(User *user, int index);
+string generatePassword(User *user, int index);
+
+template <typename T>
+void swapUser(T &a, T &b);
+
+void sortUsersAlphabetically(User *user, int numUser);
+void writeFile(fstream &file, User *user, int index);
+void saveUser(User *user, int index, string fileName);
+int loadUser(User *user, string fileName);
+void updateFile(User *user, int numUser, string fileName);
+void registerUser(User *user, int *index, int *numberOfUser, string fileName);
+bool verifyUserName(User *user, string userName, int numUser, int *index);
+bool verifyPassword(User *user, string password, int index);
+bool errorTracker(int *numError);
+bool userLogIn(User *user, int numUser, int *index);
+void viewProfile(User *user, int index);
+void printColoredStatus(string status, string text);
+void statusCounter(User *user, int index, int statusIndex);
+void userTableHeader(string role);
+void displayUser(User *user, int index, int number);
+void trainingDayHeader();
+void displayStatus(User *user, int index);
+void viewAttendance(User *user, int index);
+void takeAttendance(User *user, int numUser, string company, string platoon);
+void takeAttendance(User *user, int numUser, string staff);
+void loadAnnouncement(Announcement *announcement);
+void displayAnnouncement(Announcement *announcement);
+void saveAnnouncement(Announcement *announcement);
+void list(User *user, int numUser);
+void listOfUsers();
+void attendanceSmartSearch(User *user, int numUser, string target, string type);
+void attendanceSmartSearch(User *user, int numUser);
+void attendanceSmartSearch();
+void createAnnouncement();
+void usersFeature(User *user, int index);
+
+int main()
+{
+    int option = 0;            // Store the user's option
+    int role = 0;              // Store the user's role
+    int userIndex = 0;         // Store the user's index in logging in
+    bool running = true;       // Condition to keep the system running
+    bool loginSuccess = false; // Track if login was successful
+
+    // Basic Cadets Main Variables
+    int numCadets = 0;                      // total number of basic cadets registered
+    int lastCadet = 0;                      // track the last index of basic cadets
+    User *basicCadets = new User[MAX_USER]; // dynamic array to store basic cadets
+
+    // Advance Cadets Main Variables
+    int numAdvanceCadets = 0;                 // total number of advance cadets registered
+    int lastAdvanceCadet = 0;                 // track the last index of advance cadets
+    User *advanceCadets = new User[MAX_USER]; // dynamic array to store advance cadets
+
+    // Staff Officers Main Variables
+    int numOfficers = 0;                      // total number of staff officer registered
+    int lastOfficer = 0;                      // track the last index of staff officer
+    User *staffOfficers = new User[MAX_USER]; // dynamic array to store staff officers
+
+    // Brigade Staffs Main Variables
+    int numBrigades = 0;                      // total number of brigade staff registered
+    int lastBrigade = 0;                      // track the last index of brigade staff
+    User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
+
+    while (running)
+    {
+        // Load all users from files
+        lastCadet = loadUser(basicCadets, FILE_BASIC);
+        lastAdvanceCadet = loadUser(advanceCadets, FILE_ADVANCE);
+        lastOfficer = loadUser(staffOfficers, FILE_OFFICER);
+        lastBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
+
+        // Store the number of user in different role
+        numCadets = lastCadet;
+        numAdvanceCadets = lastAdvanceCadet;
+        numOfficers = lastOfficer;
+        numBrigades = lastBrigade;
+
+        option = userMenu("Main", ""); // Main Menu
+
+        switch (option)
+        {
+        case 1: // Registration Section
+            // Role Based Registration
+            role = userMenu("Role", ""); // Role Menu
+
+            switch (role)
+            {
+            case 1: // Basic Cadets
+                roleConverter(basicCadets, role, lastCadet);
+                registerUser(basicCadets, &lastCadet, &numCadets, FILE_BASIC);
+                break;
+            case 2: // Advance Cadets
+                roleConverter(advanceCadets, role, lastAdvanceCadet);
+                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets, FILE_ADVANCE);
+                break;
+            case 3: // Staff Officers
+                roleConverter(staffOfficers, role, lastOfficer);
+                registerUser(staffOfficers, &lastOfficer, &numOfficers, FILE_OFFICER);
+                break;
+            case 4: // Brigade Staff
+                roleConverter(brigadeStaffs, role, lastBrigade);
+                registerUser(brigadeStaffs, &lastBrigade, &numBrigades, FILE_BRIGADE);
+                break;
+            }
+            break;
+
+        case 2: // Log In Section
+            // Role Based Log In
+            role = userMenu("Role", ""); // Role Menu
+
+            switch (role)
+            {
+            case 1: // Basic Cadets
+                loginSuccess = userLogIn(basicCadets, numCadets, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(basicCadets, userIndex);
+                }
+                break;
+            case 2: // Advance Cadets
+                loginSuccess = userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(advanceCadets, userIndex);
+                }
+                break;
+            case 3: // Staff Officers
+                loginSuccess = userLogIn(staffOfficers, numOfficers, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(staffOfficers, userIndex);
+                }
+                break;
+            case 4: // Brigade Staff
+                loginSuccess = userLogIn(brigadeStaffs, numBrigades, &userIndex);
+                if (loginSuccess)
+                {
+                    usersFeature(brigadeStaffs, userIndex);
+                }
+                break;
+            }
+            break;
+
+        case 3:              // Exit
+            running = false; // Stop the system from looping
+            cout << "\nThank you for using UnitSync!\n";
+            break;
+        }
+    }
+
+    // Free Memory
+    delete[] basicCadets;
+    delete[] advanceCadets;
+    delete[] staffOfficers;
+    delete[] brigadeStaffs;
+    return 0;
+}
+
 // Function that clear the screen
 void clearScreen()
 {
@@ -95,7 +275,7 @@ void pressEnter()
 }
 
 // Function that display the user menu
-void displayUserMenu(string typeMenu, string userName = "", int *size = 0)
+void displayUserMenu(string typeMenu, string userName, int *size)
 {
     int width = 40;
     string line1 = string(width, '=');
@@ -287,7 +467,7 @@ void verifyInput(int size, int *choice, bool *verify)
 }
 
 // Function that verify the choice before returning the value
-int userMenu(string typeMenu, string userName = "")
+int userMenu(string typeMenu, string userName)
 {
     int choice = 0;
     int size = 0;
@@ -305,6 +485,22 @@ int userMenu(string typeMenu, string userName = "")
     } while (!verify);
 
     return choice;
+}
+
+// Function to display logout confirmation
+void displayLogout(string userName)
+{
+    const int width = 40;
+    string line1 = string(width, '=');
+    string line2 = string(width, '-');
+
+    displayHeader("UnitSync", width);
+    displaySubHeader("LOGOUT", width);
+
+    cout << " User: " << userName << endl;
+    cout << line2 << endl;
+    cout << " [/] You have successfully logged out.\n";
+    cout << line1 << endl;
 }
 
 // Convert company choice to string
@@ -354,10 +550,10 @@ void companyPlatoonSelection(string *company, string *platoon)
 {
     int choice = 0;
 
-    choice = userMenu("Company Menu");
+    choice = userMenu("Company Menu", "");
     *company = companyConverter(choice);
 
-    choice = userMenu("Platoon Menu");
+    choice = userMenu("Platoon Menu", "");
     *platoon = platoonConverter(choice);
 }
 
@@ -398,7 +594,8 @@ string spaceRemover(string text)
     string result = "";
     for (char c : text)
     {
-        if (c != ' '){
+        if (c != ' ')
+        {
             result += c;
         }
     }
@@ -631,7 +828,7 @@ void registerUser(User *user, int *index, int *numberOfUser, string fileName)
     {
         registerRank(user, *index);
         // Select Platoon
-        platoon = userMenu("Platoon Menu");
+        platoon = userMenu("Platoon Menu", "");
         (user + *index)->platoon = platoonConverter(platoon);
     }
     // Registration of Staff Officers and Brigade Staff
@@ -711,7 +908,7 @@ bool errorTracker(int *numError)
     {
         displayHeader("UnitSync", width);
         displaySubHeader("LOG IN", width);
-        cout << "\n [!] Too many failed attempts.\n Please try again later.\n";
+        cout << " [!] Too many failed attempts.\n Please try again later.\n";
         cout << string(width, '=') << endl;
         pressEnter();
         *numError = 0;
@@ -773,7 +970,7 @@ bool userLogIn(User *user, int numUser, int *index)
         }
     } while (!verification);
 
-    cout << "\n [/] Log In Successfully\n";
+    cout << " [/] Log In Successfully\n";
     cout << string(width, '=') << endl;
     pressEnter();
 
@@ -1104,11 +1301,11 @@ void takeAttendance(User *user, int numUser, string staff)
 
     if (staff == "S1")
     {
-        choice = userMenu("Company Menu");
+        choice = userMenu("Company Menu", "");
         company = companyConverter(choice);
     }
 
-    choice = userMenu("Platoon Menu");
+    choice = userMenu("Platoon Menu", "");
     platoon = platoonConverter(choice);
 
     takeAttendance(user, numUser, company, platoon);
@@ -1381,11 +1578,11 @@ void attendanceSmartSearch(User *user, int numUser)
     // Searh Menu
     if (role == "Basic Cadet")
     {
-        basicCadetChoice = userMenu("Basic Cadet Search Menu");
+        basicCadetChoice = userMenu("Basic Cadet Search Menu", "");
     }
     else if (role == "Advance Cadet")
     {
-        advanceCadetChoice = userMenu("Advance Cadet Search Menu");
+        advanceCadetChoice = userMenu("Advance Cadet Search Menu", "");
     }
 
     // Search by Company
@@ -1578,6 +1775,7 @@ void usersFeature(User *user, int index)
                 viewAttendance(user, index);
                 break;
             case 4: // Log out
+                displayLogout((user + index)->userName);
                 running = false;
                 break;
             default:
@@ -1611,6 +1809,7 @@ void usersFeature(User *user, int index)
                 displayAnnouncement(announcement);
                 break;
             case 4: // Log out
+                displayLogout((user + index)->userName);
                 running = false;
                 break;
             default:
@@ -1640,6 +1839,7 @@ void usersFeature(User *user, int index)
                 attendanceSmartSearch();
                 break;
             case 5: // Log out
+                displayLogout((user + index)->userName);
                 running = false;
                 break;
             default:
@@ -1653,127 +1853,4 @@ void usersFeature(User *user, int index)
     delete[] advanceCadets;
     delete[] staffOfficers;
     delete announcement;
-}
-
-int main()
-{
-    int option = 0;            // Store the user's option
-    int role = 0;              // Store the user's role
-    int userIndex = 0;         // Store the user's index in logging in
-    bool running = true;       // Condition to keep the system running
-    bool loginSuccess = false; // Track if login was successful
-
-    // Basic Cadets Main Variables
-    int numCadets = 0;                      // total number of basic cadets registered
-    int lastCadet = 0;                      // track the last index of basic cadets
-    User *basicCadets = new User[MAX_USER]; // dynamic array to store basic cadets
-
-    // Advance Cadets Main Variables
-    int numAdvanceCadets = 0;                 // total number of advance cadets registered
-    int lastAdvanceCadet = 0;                 // track the last index of advance cadets
-    User *advanceCadets = new User[MAX_USER]; // dynamic array to store advance cadets
-
-    // Staff Officers Main Variables
-    int numOfficers = 0;                      // total number of staff officer registered
-    int lastOfficer = 0;                      // track the last index of staff officer
-    User *staffOfficers = new User[MAX_USER]; // dynamic array to store staff officers
-
-    // Brigade Staffs Main Variables
-    int numBrigades = 0;                      // total number of brigade staff registered
-    int lastBrigade = 0;                      // track the last index of brigade staff
-    User *brigadeStaffs = new User[MAX_USER]; // dynamic array to store brigade staffs
-
-    while (running)
-    {
-        // Load all users from files
-        lastCadet = loadUser(basicCadets, FILE_BASIC);
-        lastAdvanceCadet = loadUser(advanceCadets, FILE_ADVANCE);
-        lastOfficer = loadUser(staffOfficers, FILE_OFFICER);
-        lastBrigade = loadUser(brigadeStaffs, FILE_BRIGADE);
-
-        // Store the number of user in different role
-        numCadets = lastCadet;
-        numAdvanceCadets = lastAdvanceCadet;
-        numOfficers = lastOfficer;
-        numBrigades = lastBrigade;
-
-        option = userMenu("Main"); // Main Menu
-
-        switch (option)
-        {
-        case 1: // Registration Section
-            // Role Based Registration
-            role = userMenu("Role"); // Role Menu
-
-            switch (role)
-            {
-            case 1: // Basic Cadets
-                roleConverter(basicCadets, role, lastCadet);
-                registerUser(basicCadets, &lastCadet, &numCadets, FILE_BASIC);
-                break;
-            case 2: // Advance Cadets
-                roleConverter(advanceCadets, role, lastAdvanceCadet);
-                registerUser(advanceCadets, &lastAdvanceCadet, &numAdvanceCadets, FILE_ADVANCE);
-                break;
-            case 3: // Staff Officers
-                roleConverter(staffOfficers, role, lastOfficer);
-                registerUser(staffOfficers, &lastOfficer, &numOfficers, FILE_OFFICER);
-                break;
-            case 4: // Brigade Staff
-                roleConverter(brigadeStaffs, role, lastBrigade);
-                registerUser(brigadeStaffs, &lastBrigade, &numBrigades, FILE_BRIGADE);
-                break;
-            }
-            break;
-
-        case 2: // Log In Section
-            // Role Based Log In
-            role = userMenu("Role"); // Role Menu
-
-            switch (role)
-            {
-            case 1: // Basic Cadets
-                loginSuccess = userLogIn(basicCadets, numCadets, &userIndex);
-                if (loginSuccess)
-                {
-                    usersFeature(basicCadets, userIndex);
-                }
-                break;
-            case 2: // Advance Cadets
-                loginSuccess = userLogIn(advanceCadets, numAdvanceCadets, &userIndex);
-                if (loginSuccess)
-                {
-                    usersFeature(advanceCadets, userIndex);
-                }
-                break;
-            case 3: // Staff Officers
-                loginSuccess = userLogIn(staffOfficers, numOfficers, &userIndex);
-                if (loginSuccess)
-                {
-                    usersFeature(staffOfficers, userIndex);
-                }
-                break;
-            case 4: // Brigade Staff
-                loginSuccess = userLogIn(brigadeStaffs, numBrigades, &userIndex);
-                if (loginSuccess)
-                {
-                    usersFeature(brigadeStaffs, userIndex);
-                }
-                break;
-            }
-            break;
-
-        case 3:              // Exit
-            running = false; // Stop the system from looping
-            cout << "\nThank you for using UnitSync!\n";
-            break;
-        }
-    }
-
-    // Free Memory
-    delete[] basicCadets;
-    delete[] advanceCadets;
-    delete[] staffOfficers;
-    delete[] brigadeStaffs;
-    return 0;
 }
