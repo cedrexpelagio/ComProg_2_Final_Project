@@ -19,6 +19,15 @@ const string FILE_BRIGADE = "brigadeStaff.txt";
 
 const string FILE_ANNOUNCE = "announcement.txt";
 
+// 2D array for all conversions
+const string CONVERT_TABLE[5][4] = {
+    {"Basic Cadet", "Advance Cadet", "Staff Officer", "Brigade Staff"},  // Role (row 0)
+    {"Alpha", "Bravo", "Charlie", "Delta"},                              // Company (row 1)
+    {"1st Platoon", "2nd Platoon", "3rd Platoon", "4th Platoon"},        // Platoon (row 2)
+    {"S1", "S3", "", ""},                                                // Staff (row 3)
+    {"Present", "Late", "Excuse", "Absent"}                              // Status (row 4)
+};
+
 // Struct for User's data
 struct User
 {
@@ -298,83 +307,34 @@ int userMenu(string typeMenu, string userName = "")
     return choice;
 }
 
-// Function that converter user role based on role option
-void roleConverter(User *user, int role, int index)
-{
-    switch (role)
-    {
-    case 1:
-        (user + index)->role = "Basic Cadet";
-        break;
-    case 2:
-        (user + index)->role = "Advance Cadet";
-        break;
-    case 3:
-        (user + index)->role = "Staff Officer";
-        break;
-    case 4:
-        (user + index)->role = "Brigade Staff";
-        break;
-    }
-}
-
-// Function that convert company choice to string
+// Convert company choice to string
 string companyConverter(int company)
 {
-    switch (company)
-    {
-    case 1:
-        return "Alpha";
-    case 2:
-        return "Bravo";
-    case 3:
-        return "Charlie";
-    case 4:
-        return "Delta";
-    }
+    return CONVERT_TABLE[1][company - 1];
 }
 
-// Function that convert platoon choice to string
+// Convert platoon choice to string
 string platoonConverter(int platoon)
 {
-    switch (platoon)
-    {
-    case 1:
-        return "1st Platoon";
-    case 2:
-        return "2nd Platoon";
-    case 3:
-        return "3rd Platoon";
-    case 4:
-        return "4th Platoon";
-    }
+    return CONVERT_TABLE[2][platoon - 1];
 }
 
-// Function that convert staff choice to string
+// Convert staff choice to string
 string staffConverter(int staff)
 {
-    switch (staff)
-    {
-    case 1:
-        return "S1";
-    case 2:
-        return "S3";
-    }
+    return CONVERT_TABLE[3][staff - 1];
 }
 
+// Convert status choice to string
 string statusConverter(int status)
 {
-    switch (status)
-    {
-    case 1:
-        return "Present";
-    case 2:
-        return "Late";
-    case 3:
-        return "Excuse";
-    case 4:
-        return "Absent";
-    }
+    return CONVERT_TABLE[4][status - 1];
+}
+
+// Convert role
+void roleConverter(User *user, int role, int index)
+{
+    (user + index)->role = CONVERT_TABLE[0][role - 1];
 }
 
 // Function to select company or platoon
