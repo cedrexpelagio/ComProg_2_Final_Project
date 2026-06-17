@@ -194,9 +194,9 @@ void displayUserMenu(string typeMenu, string userName = "", int *size = 0)
         cout << line2 << line2 << "\n";
         cout << " STATUS SELECTION\n";
         cout << line2 << line2 << "\n";
-        cout << " [1] Present    ";
-        cout << "[2] Late     ";
-        cout << "[3] Excuse     ";
+        cout << " [1] Present            ";
+        cout << "[2] Late             ";
+        cout << "[3] Excuse             ";
         cout << "[4] Absent\n";
         cout << line1 << line1 << "\n";
     }
@@ -255,7 +255,7 @@ bool verifyInput(int size, int choice)
 void verifyInput(int size, int *choice, bool *verify)
 {
     // Vefiry if the choice is an interger
-    if (cin >> *choice) 
+    if (cin >> *choice)
     {
         // Handle range of integer input
         *verify = verifyInput(size, *choice);
@@ -266,7 +266,6 @@ void verifyInput(int size, int *choice, bool *verify)
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-
     }
     else
     {
@@ -274,7 +273,7 @@ void verifyInput(int size, int *choice, bool *verify)
         cin.clear();
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         cout << "\n[!] Please enter a number.\n";
-        
+
         *verify = false;
     }
 }
@@ -293,7 +292,7 @@ int userMenu(string typeMenu, string userName = "")
 
         verifyInput(size, &choice, &verify);
 
-            pressEnter();
+        pressEnter();
 
     } while (!verify);
 
@@ -952,23 +951,34 @@ void viewAttendance(User *user, int index)
     cout << line1 << "\n";
 }
 
-// Function for the staff officer to take cadets attendanc
+// Function for the staff officer to take cadets attendance
 void takeAttendance(User *user, int numUser, string company, string platoon)
 {
     int trainingDay = 0;
     int status = 0;
     int counter = 0;
     const int width = 40;
+    int doubleWidth = width * 2;
     string fileName = "";
     string role = (user + 0)->role;
+    string line1 = string(doubleWidth, '=');
+    string line2 = string(doubleWidth, '-');
     bool verify = false;
+    bool statusValid = false;
 
-    do {
-    displayHeader("TAKE ATTENDANCE", width);
-    displaySubHeader("Enter Training Day (1-15)", width);
-    cout << " Training Day: ";
-    verifyInput(15, &trainingDay, &verify);
-    pressEnter();
+    // Training Day Input with Validation
+    do
+    {
+        displayHeader("TAKE ATTENDANCE", width);
+        displaySubHeader("Enter Training Day (1-15)", width);
+        cout << " Training Day: ";
+        verifyInput(15, &trainingDay, &verify);
+        
+        if (!verify)
+        {
+            pressEnter();
+        }
+        
     } while (!verify);
 
     if (role == "Basic Cadet")
@@ -980,8 +990,13 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
         fileName = FILE_ADVANCE; // Advance Cadet File
     }
 
-    displayUserMenu("Status Menu", "");
+    displayHeader("TAKE ATTENDANCE", doubleWidth);
+    displaySubHeader("TRAINING DAY: " + to_string(trainingDay), doubleWidth);
+    displayUserMenu("Status Menu");
     cout << endl;
+
+    cout << "DESIGNATION: " << company << " " << platoon << endl;
+    cout << string(doubleWidth, '-') << endl;
 
     // Cadets information header
     userTableHeader(role);
@@ -989,18 +1004,50 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
 
     for (int i = 0; i < numUser; i++)
     {
-
         if ((user + i)->company == company && (user + i)->platoon == platoon)
         {
-            // Display the users basic information
-            counter++;
-            displayUser(user, i, counter);
-            cout << setw(5) << left;
-            cin >> status;
+            
+            do
+            {
+                // Display the users basic information
+                counter++;
+                displayUser(user, i, counter);
+                cout << setw(5) << left;
+                
+                // Use verifyInput for status validation (1-4 range)
+                verifyInput(4, &status, &statusValid);
+                
+                if (!statusValid)
+                {
+                    // Decrement counter to re-display the same user
+                    counter--;
+                    cout << line2 << endl;
+                    cout << line1 << endl;
+                    pressEnter();
+                    
+                    // Redisplay the header and user list from the start
+                    displayHeader("TAKE ATTENDANCE", doubleWidth);
+                    displaySubHeader("TRAINING DAY: " + to_string(trainingDay), doubleWidth);
+                    displayUserMenu("Status Menu");
+                    cout << endl;
+                    cout << "DESIGNATION: " << company << " " << platoon << endl;
+                    cout << line2 << endl;
 
-            (user + i)->status[trainingDay - 1] = statusConverter(status);
+                    userTableHeader(role);
+                    cout << setw(5) << left << "Status" << endl;
+                }
+                else
+                {
+                    // Valid status - save it
+                    (user + i)->status[trainingDay - 1] = statusConverter(status);
+                }
+                
+            } while (!statusValid);
         }
     }
+
+    cout << line2 << endl;
+    cout << line1 << endl;       
 
     updateFile(user, numUser, fileName);
 }
@@ -1060,6 +1107,7 @@ void displayAnnouncement(Announcement *announcement)
 
     // Display the announcements
     displayHeader("!! ANNOUNCEMENT !!", width);
+    displaySubHeader("ANNOUNCEMENT DETAILS", width);
 
     cout << left << setw(10) << "WHAT" << ": " << announcement->what << "\n";
     cout << left << setw(10) << "WHO" << ": " << announcement->who << "\n";
@@ -1391,6 +1439,10 @@ void createAnnouncement()
     // Temporary variable for to bring and note variable in the structure
     string item = "";
     string note = "";
+    const int width = 50;
+
+    displayHeader("CREATE ANNOUNCEMENT", width);
+    displaySubHeader("ANNOUNCEMENT DETAILS", width);
 
     cin.ignore();
     cout << "WHAT: ";
