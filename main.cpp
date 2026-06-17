@@ -16,6 +16,7 @@ const string FILE_BASIC = "basicCadet.txt";
 const string FILE_ADVANCE = "advanceCadet.txt";
 const string FILE_OFFICER = "staffOfficer.txt";
 const string FILE_BRIGADE = "brigadeStaff.txt";
+
 const string FILE_ANNOUNCE = "announcement.txt";
 
 // Struct for User's data
@@ -957,11 +958,18 @@ void takeAttendance(User *user, int numUser, string company, string platoon)
     int trainingDay = 0;
     int status = 0;
     int counter = 0;
+    const int width = 40;
     string fileName = "";
     string role = (user + 0)->role;
+    bool verify = false;
 
-    cout << "Enter Training Day: ";
-    cin >> trainingDay;
+    do {
+    displayHeader("TAKE ATTENDANCE", width);
+    displaySubHeader("Enter Training Day (1-15)", width);
+    cout << " Training Day: ";
+    verifyInput(15, &trainingDay, &verify);
+    pressEnter();
+    } while (!verify);
 
     if (role == "Basic Cadet")
     {
